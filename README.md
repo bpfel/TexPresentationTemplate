@@ -1,6 +1,6 @@
 # Why
 
-LaTeX presentations look nice, but setting them up is sometimes not intuitive as in PowerPoint. The goal of this project is to define a set of environments to easily set up an educationally useful set of slides.
+LaTeX presentations look nice, but setting them up is sometimes not as intuitive as in PowerPoint. The goal of this project is to define a set of environments to easily set up an educationally useful set of slides.
 
 # What
 
@@ -14,3 +14,19 @@ LaTeX presentations look nice, but setting them up is sometimes not intuitive as
 # How
 
 This project will rely substantially on `\usepackage{beamer}` and one of the pre-defined styles.
+
+# TODO
+
+* [ ] Include Header Files from ARIS
+* [ ] Choose style template
+* [ ] Set up equations template / environments
+* [ ] Set up Learning objectives environment
+* [ ] Set up Title page environment
+* [ ] Set up Time schedule environment
+* [ ] Set up Picture slide environment
+* [ ] Set up multi-picture slide environment
+* [ ] Set up listings environment for C++
+* [ ] Set up listings environment for python
+* [ ] Set up listings environment for LaTeX
+* [ ] Set up listings environment for Matlab
+* [ ] Set up listings environment for bash 
