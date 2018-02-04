@@ -17,7 +17,7 @@ This project will rely substantially on `\usepackage{beamer}` and one of the pre
 
 # TODO
 
-* [ ] Include Header Files from ARIS
+* [x] Include Header Files from ARIS
 * [ ] Choose style template
 * [ ] Set up equations template / environments
 * [ ] Set up Learning objectives environment
