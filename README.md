@@ -13,16 +13,15 @@ LaTeX presentations look nice, but setting them up is sometimes not as intuitive
 
 # How
 
-This project will rely substantially on `\usepackage{beamer}` and one of the pre-defined styles.
+This project will rely substantially on `\documentclass{beamer}` and on `\usetheme{Boadilla}`.
 
 # TODO
 
-* [ ] Include Header Files from ARIS
-* [ ] Choose style template
-* [ ] Set up equations template / environments
-* [ ] Set up Learning objectives environment
-* [ ] Set up Title page environment
-* [ ] Set up Time schedule environment
+* [x] Include Header Files from ARIS
+* [x] Choose style template
+* [x] Set up Learning objectives environment
+* [x] Set up Title page environment
+* [x] Set up Time schedule environment
 * [ ] Set up Picture slide environment
 * [ ] Set up multi-picture slide environment
 * [ ] Set up listings environment for C++
