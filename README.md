@@ -13,7 +13,7 @@ LaTeX presentations look nice, but setting them up is sometimes not as intuitive
 
 # How
 
-This project will rely substantially on `\usepackage{beamer}` and one of the pre-defined styles.
+This project will rely substantially on `\documentclass{beamer}` and on `\usetheme{Boadilla}`.
 
 # TODO
 
