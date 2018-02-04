@@ -7,6 +7,10 @@
 *.bcf
 *.blg
 *.run.xml
+*.vrb
+*.synctex(busy)
+*.nav
+*.snm
 
 # cmake related garbage
 *.bin

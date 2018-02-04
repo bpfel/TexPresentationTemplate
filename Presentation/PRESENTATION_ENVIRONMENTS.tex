@@ -1,0 +1,110 @@
+%This document contains all specially defined environments, used for the presentation template
+%The prepended T stands for "Template"
+%The prepended TP stands for "TemplatePresentation" - it is the general identifier for environments in this template
+%The prepended TF stands for "TemplateFrame" and denotes all environments that create a frame of their own. Multiple commands exist in parallel, as TP and TF, such that they can be combined flexibly.
+
+\usepackage{environ} %Define new environments that work with frames
+%Usage for frames:
+%\NewEnviron{EnvironmentName}[<#arguments>][<default of optional arguments starting with #1>]{%
+%\begin{frame}{<FrameTitle>}
+%<macrobeforebody>
+%\BODY
+%<macroafterbody>
+%\end{frame}
+%}
+
+
+\NewEnviron{TFTimeSchedule}[1][]{
+\begin{frame}{Time Schedule#1}
+\begin{itemize}
+\BODY
+\end{itemize}
+\end{frame}
+}
+%Usage:
+%\begin{TPTimeSchedule}
+%\item 15' This
+%\item 70' That
+%\item 5'  And others
+%\end{TPTimeSchedule}
+
+\NewEnviron{TFLearningObjectives}[1][]{
+\begin{frame}{Learning Objectives#1}
+\begin{itemize}
+\BODY
+\end{itemize}
+\end{frame}
+}
+%Usage:
+%\begin{TPLearningObjectives}
+%\item Understand the assumptions for the Euler equations.
+%\item Be able to apply the Euler equations to 3D rigid bodies.
+%\item Understand the TSP-Rule.
+%\end{TPLearningObjectives}
+
+\NewEnviron{TFPicture}[3][]{
+\begin{frame}
+\begin{figure}
+\includegraphics[width=\linewidth,height=0.8\textheight,keepaspectratio]{#1}
+\caption{#2}
+\label{#3}
+\end{figure}
+\BODY
+\end{frame}
+}
+%Usage:
+%\begin{TFPicture}[Landscape]{An image in landscape orientation.}{fig:Landscape}
+%Some text below.
+%\end{TFPicture}
+
+\NewEnviron{TPPicture}[3][]{
+\begin{figure}
+\includegraphics[width=\linewidth,height=0.65\textheight,keepaspectratio]{#1}
+\caption{#2}
+\label{#3}
+\end{figure}
+\BODY
+}
+%Usage:
+%\begin{TPPicture}[Landscape]{An image in landscape orientation.}{fig:Landscape}
+%Some text below.
+%\end{TPPicture}
+
+\NewEnviron{TFTwoColumns}[3][]{
+\begin{frame}{#1}
+\begin{columns}[T]
+\begin{column}{.48\textwidth}
+#2
+\end{column}%
+\hfill%
+\begin{column}{.48\textwidth}
+#3
+\end{column}
+\end{columns}
+\end{frame}
+}
+%Usage:
+%\begin{TPTwoColumns}[Title]
+%{content on the left}
+%{and also content on the right}
+%\end{TPTwoColumns}
+
+\newcommand{\matlab}{
+\lstset{language=Matlab,%
+%basicstyle=\color{red},
+breaklines=true,%
+morekeywords={matlab2tikz},
+keywordstyle=\color{blue},%
+morekeywords=[2]{1}, keywordstyle=[2]{\color{black}},
+identifierstyle=\color{black},%
+stringstyle=\color{BlueViolet},
+commentstyle=\color{ForestGreen},%
+showstringspaces=false,%without this there will be a symbol in the places where there is a space
+numbers=left,%
+numberstyle={\tiny \color{black}},% size of the numbers
+numbersep=9pt, % this defines how far the numbers are from the text
+backgroundcolor=\color{yellow!20!white},
+frame=single,
+escapeinside={\%*}{*)},
+}
+}

@@ -1,0 +1,68 @@
+\documentclass[usenames,dvipsnames]{beamer}
+%Note that when updating the headerfiles xcolor and hyperref need to be removed again to avoid an option clash.
+\usetheme{Boadilla}
+
+\input{../HEADERFILES_FOR_LATEX/PACKAGES}
+\input{../HEADERFILES_FOR_LATEX/ENVIRONMENTS}
+\input{PRESENTATION_ENVIRONMENTS}
+\input{../HEADERFILES_FOR_LATEX/COMMANDS}
+\graphicspath{{./Pictures/}}
+
+\title{TITLE OF YOUR PRESENTATION}
+\author{AUTHOR OF YOUR PRESENTATION}
+\date{\today}
+
+\begin{document}
+%Make title page from above supplied information on title, author, etc.
+\maketitle
+
+\begin{TFTimeSchedule}
+\item 15' This
+\item 70' That
+\item 5'  And others
+\end{TFTimeSchedule}
+
+\begin{TFLearningObjectives}
+\item First goal.
+\item Second goal.
+\item Third goal.
+\end{TFLearningObjectives}
+
+\begin{TFPicture}[Landscape]{An image in landscape orientation.}{fig:Landscape}
+Some text below.
+\end{TFPicture}
+
+\begin{TFPicture}[Portrait]{An image in portrait orientation.}{fig:Portrait}
+\end{TFPicture}
+
+\begin{TFTwoColumns}[Title]
+{content on the left}
+{and also content on the right}
+\end{TFTwoColumns}
+
+%And example of a flexible combination of TF and TP environments
+\begin{TFTwoColumns}[Title]
+{
+\begin{TPPicture}[Landscape]{An image in landscape orientation.}{fig:Landscape1}
+\end{TPPicture}
+}
+{
+\begin{TPPicture}[Portrait]{An image in portrait orientation.}{fig:Portrait1}
+\end{TPPicture}
+}
+\end{TFTwoColumns}
+
+\begin{frame}[fragile]
+\matlab
+\begin{center}
+\begin{minipage}{0.9\linewidth}
+\begin{lstlisting}
+for i=1:2:10
+	do something
+end
+\end{lstlisting}
+\end{minipage}
+\end{center}
+\end{frame}
+
+\end{document}
