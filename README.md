@@ -19,7 +19,6 @@ This project will rely substantially on `\documentclass{beamer}` and on `\usethe
 
 * [x] Include Header Files from ARIS
 * [x] Choose style template
-* [ ] Set up equations template / environments
 * [x] Set up Learning objectives environment
 * [x] Set up Title page environment
 * [x] Set up Time schedule environment
