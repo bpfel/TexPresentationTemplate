@@ -1,0 +1,25 @@
+# latex related garbage
+*.aux
+*.out
+*.synctex.gz
+*.toc
+*.bbl
+*.bcf
+*.blg
+*.run.xml
+
+# cmake related garbage
+*.bin
+*.cmake
+*.marks
+*.dir
+*.log
+*.check_cache
+*.out
+*.internal
+*.o
+*.a
+*.cxx
+
+# other garbage
+*.ini
