@@ -18,11 +18,11 @@ This project will rely substantially on `\documentclass{beamer}` and on `\usethe
 # TODO
 
 * [x] Include Header Files from ARIS
-* [ ] Choose style template
+* [x] Choose style template
 * [ ] Set up equations template / environments
-* [ ] Set up Learning objectives environment
-* [ ] Set up Title page environment
-* [ ] Set up Time schedule environment
+* [x] Set up Learning objectives environment
+* [x] Set up Title page environment
+* [x] Set up Time schedule environment
 * [ ] Set up Picture slide environment
 * [ ] Set up multi-picture slide environment
 * [ ] Set up listings environment for C++
