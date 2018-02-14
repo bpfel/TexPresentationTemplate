@@ -52,17 +52,60 @@ Some text below.
 }
 \end{TFTwoColumns}
 
-\begin{frame}[fragile]
-\matlab
-\begin{center}
-\begin{minipage}{0.9\linewidth}
-\begin{lstlisting}
+\begin{frame}[fragile]{Matlab listing}
+\begin{TFMatlab}
 for i=1:2:10
-	do something
+    disp('Hello world!')
 end
-\end{lstlisting}
-\end{minipage}
-\end{center}
+\end{TFMatlab}
+\end{frame}
+
+\begin{frame}[fragile]{Bash listing}
+\begin{TFBash}
+#!/bin/bash
+# declare STRING variable
+STRING="Hello World"
+#print variable on a screen
+echo $STRING
+nvim $STRING
+\end{TFBash}
+\end{frame}
+
+\begin{frame}[fragile]{Cpp listing}
+\begin{TFCpp}
+#include <iostream>
+
+using namespace std;
+
+int main (int argc, char **argv){
+	cout<<"Hello world!"<<endl;
+	//This is a comment
+	return 0;
+}
+\end{TFCpp}
+\end{frame}
+
+\begin{frame}[fragile]{Python listing}
+\begin{TFPython}
+class MyClass(Yourclass):
+    def __init__(self, my, yours):
+        bla = '5 1 2 3 4'
+        print bla
+\end{TFPython}
+\end{frame}
+
+\begin{frame}[fragile]{\LaTeX\ listing}
+\begin{TFLatex}
+\usepackage{bla}
+
+\documentclass[usenames]{beamer}
+
+\begin{document}
+\section{bla}
+Lorem ipsum bla.
+%Comment
+\end{document}
+\end{TFLatex}
 \end{frame}
 
 \end{document}

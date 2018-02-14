@@ -89,22 +89,121 @@
 %{and also content on the right}
 %\end{TPTwoColumns}
 
-\newcommand{\matlab}{
-\lstset{language=Matlab,%
-%basicstyle=\color{red},
+\newcommand{\lsgeneral}{
+\lstset{basicstyle=\ttfamily,
 breaklines=true,%
-morekeywords={matlab2tikz},
-keywordstyle=\color{blue},%
-morekeywords=[2]{1}, keywordstyle=[2]{\color{black}},
-identifierstyle=\color{black},%
-stringstyle=\color{BlueViolet},
-commentstyle=\color{ForestGreen},%
 showstringspaces=false,%without this there will be a symbol in the places where there is a space
+showspaces=false,% show spaces adding particular underscores
+showtabs=false, % show tabs within strings adding particular underscores
+tabsize=2,
+breaklines=true,
 numbers=left,%
 numberstyle={\tiny \color{black}},% size of the numbers
 numbersep=9pt, % this defines how far the numbers are from the text
-backgroundcolor=\color{yellow!20!white},
 frame=single,
-escapeinside={\%*}{*)},
+breakatwhitespace=false,% sets if automatic breaks should only happen at whitespace
+xleftmargin=0.05\textwidth,
+columns=flexible,
 }
+}
+
+\newcommand{\lsmatlab}{
+\lstset{language=Matlab,
+keywordstyle=\color{blue},%
+keywordstyle=[2]{\color{black}},
+identifierstyle=\color{black},%
+stringstyle=\color{BlueViolet},
+commentstyle=\color{ForestGreen},
+backgroundcolor=\color{yellow!20!white},
+}
+}
+
+\lstnewenvironment{TFMatlab}[1][]{
+	\lstset{caption={#1}}
+	\lsgeneral
+	\lsmatlab
+	\centering\minipage{.9\textwidth}%
+}{
+	\endminipage%
+}
+
+\newcommand{\lsbash}{
+\lstset{
+language=Bash,
+backgroundcolor=\color{black!90!white},
+keywordstyle=\color{violet!60!white},
+commentstyle=\color{gray!60!white},
+stringstyle=\color{red!60!white},
+basicstyle=\color{white},
+morekeywords={nvim, ls}
+}
+}
+
+\lstnewenvironment{TFBash}[1][]{
+	\lstset{caption={#1}}
+	\lsgeneral
+	\lsbash
+	\centering\minipage{.9\textwidth}%
+}{
+	\endminipage%
+}
+
+\newcommand{\lscpp}{
+\lstset{ 
+	language=C++,% choose the language of the code
+	backgroundcolor=\color{black!90!white},
+	basicstyle=\color{white}\ttfamily,
+    keywordstyle=\color{violet!60!white},
+    stringstyle=\color{red!60!white},
+    commentstyle=\color{green!60!white},
+    morecomment=[l][\color{blue!60!white}]{\#}
+}
+}
+
+\lstnewenvironment{TFCpp}[1][]{
+	\lstset{caption={#1}}
+	\lsgeneral
+	\lscpp
+	\centering\minipage{.9\textwidth}%
+}{
+	\endminipage%
+}
+
+\newcommand{\lspython}{\lstset{
+language=Python,
+otherkeywords={self},             % Add keywords here
+keywordstyle=\color{black!50!blue},
+emph={MyClass,__init__},          % Custom highlighting
+emphstyle=\color{black!20!red},    % Custom highlighting style
+stringstyle=\color{blue!20!green},
+}
+}
+
+\lstnewenvironment{TFPython}[1][]{
+	\lstset{caption={#1}}
+	\lsgeneral
+	\lspython
+	\centering\minipage{.9\textwidth}%
+}{
+	\endminipage%
+}
+
+\newcommand{\lstex}{\lstset{
+language=Tex,
+backgroundcolor=\color{brown!8!white},
+keywordstyle=\color{black!10!blue},
+stringstyle=\color{blue!20!green},
+commentstyle=\color{black!40!white},
+emph={\section,\subsection,\subsubsection,\input,\begin,\documentclass,\usepackage},          % Custom highlighting
+emphstyle=\color{blue}\bfseries,
+}
+}
+
+\lstnewenvironment{TFLatex}[1][]{
+	\lstset{caption={#1}}
+	\lsgeneral
+	\lstex
+	\centering\minipage{.9\textwidth}%
+}{
+	\endminipage%
 }
