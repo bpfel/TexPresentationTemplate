@@ -1,0 +1,198 @@
+%This file contains all new environments simplifying LaTeX text editing
+%For each new environment clearly document its dependencies (packages) and its use
+%Adhere to the ordering by category!
+
+%----------------------------------------------------------------------------------------------
+%Title Page
+%----------------------------------------------------------------------------------------------
+\NewDocumentEnvironment{TTitlepage}{mmmm} %Defines an environment for the titlepage
+{
+\begin{titlepage}
+\setlength{\parindent}{0pt}	 \centering
+\Huge{\bfseries #1} \\						% X: Document Title
+\huge Project TELL \\	[1.cm]
+
+	\begin {table} [H]
+		\label {tab:contenttable} \large 
+		\centering
+		\begin {tabular} {r l} \midrule
+
+		\bfseries{Doc. Reference} & #2 \\ 		% X: Doc. Ref. No.
+		\bfseries{Author} & #3  \\						% X: Author Name
+		\bfseries{Date} & #4  \\ \\ 						% X: Date of creation
+
+		\end {tabular}
+	\end {table}
+
+\begin{figure}[H]
+	\centering
+   	\includegraphics[width=7cm]{../HEADERFILES_FOR_LATEX/Logo/tell}
+\end{figure}
+
+	\vspace*{\fill}
+	\begin {table} [H]
+		\label {tab:notetable} \large \centering
+		\begin {tabular} {l p{12cm}} 
+
+		\midrule
+		\bfseries{Note} 
+							
+		% X: Add notes here if you have any after the &, else write N/A
+		&
+}{
+\end {tabular}
+	\end {table}
+\end{titlepage}
+}
+%Usage
+%\begin{TTitlepage}{<Document Title>}{<Document Reference Number>}{<Author Name>}{<Date Of Creation>}
+%<your notes on the document>
+%\end{TTitlepage}
+%Dependencies: \usepackage{booktabs,xparse}	
+		
+
+%----------------------------------------------------------------------------------------------
+%Tables
+%----------------------------------------------------------------------------------------------
+\NewDocumentEnvironment{TTable}{O{1}mmmm} %Defines a basic tabular environment
+{
+\begin{table}[H]
+\centering
+\rowcolors{#1}{white}{gray!25}
+\begin{tabular}{#2}
+\toprule
+}
+{
+\bottomrule
+\end{tabular}
+\caption[#3]{#4}
+\label{#5}
+\end{table}
+}
+%Usage:
+%\begin{TTable}[<startindex for colors>]
+%{<table layout>}
+%{<your short caption>}
+%{<your caption>}
+%{<your label>}
+%<your Content>
+%\end{TTable}
+%Dependencies: \usepackage{booktabs,xcolors,xparse}
+
+
+
+\NewDocumentEnvironment{TTable*}{mmmm} %Defines a basic tabular environment
+{
+\begin{table}[H]
+\centering
+\begin{tabular}{#1}
+\toprule
+}
+{
+\bottomrule
+\end{tabular}
+\caption[#2]{#3}
+\label{#4}
+\end{table}
+}
+%Usage:
+%\begin{TTable*}{<table layout>}
+%{<your short caption>}
+%{<your caption>}
+%{<your label>}
+
+%<your Content>
+
+%\end{TTable*}
+
+
+
+\NewDocumentEnvironment{TSimTable}{mmm} %Defines a tabular environment for simulation data
+{
+\tiny
+\begin{landscape} %rotate the table by 90 degrees
+\begin{TTable}[8]{l|l|l|l|l|l|l|l|l|l|l|l|l|l}{#1}{#2}{#3} %Use the TTable environment
+
+%First line of the table head
+\multicolumn{2}{l}{}&\multicolumn{7}{l}{\textbf{\large Parameters}}&\multicolumn{5}{l}{\textbf{\large Results}}\\
+\cmidrule[2pt]{3-6}\cmidrule[2pt]{10-12}
+%Second line of the table head
+\multicolumn{2}{l}{}&\multicolumn{3}{l}{Rocket}&\multicolumn{3}{l}{Motor}&\multicolumn{1}{l}{}&\multicolumn{2}{l}{Performance}&\multicolumn{3}{l}{Stability}\\
+\cmidrule{3-14}
+%Third line of the table head
+\mc{l}{SIN}&\mc{l}{Software}&\mc{l}{Name}&\mc{l}{Conf.}&\mc{l}{$m_{tot}$}&\mc{l}{Type}&\mc{l}{$m_{Motor}$}&\mc{l}{$m_{Fuel}$}&\mc{l}{$m_{Stage}$}&\mc{l}{$h$}&\mc{l}{$a_{max}$}&\mc{l}{$v_{LRE}$}&\mc{l}{St. Mar.}&\mc{l}{Dpg. Ratio}\\ %the \mc command gets rid of unneeded vertical lines, see COMMANDS for an explanation
+%Forth line of the table head
+\multicolumn{4}{l}{}&\mc{l}{$[\si{\kilo\gram}]$}&\mc{l}{}&\mc{l}{$[\si{\kilo\gram}]$}&\mc{l}{$[\si{\kilo\gram}]$}&\mc{l}{$[\si{\kilo\gram}]$}&\mc{l}{$[\si{\kilo\meter}]$}&\mc{l}{$[\si{\meter\per\second\squared}]$}&\mc{l}{$[\si{\meter\per\second}]$}&\multicolumn{2}{l}{}\\
+\midrule
+}
+{
+\end{TTable}
+\end{landscape}
+\normalsize
+}
+%Usage
+%\begin{TSimTable}{<your short caption>}{<your caption>}{<your label>}
+%<your content in 14 columns>
+%\end{TSimTable}
+%Dependencies: \usepackage{lscape,booktabs,siunitx,xcolor,xparse}
+
+\NewDocumentEnvironment{TDefinitionTable}{} %Used to define variables in an equation
+{
+\footnotesize
+\begin{center}
+\begin{tabular}{l@{$\quad$}l@{\dotfill$\quad$}cl}
+}
+{
+\end{tabular}
+\end{center}
+\normalsize
+}
+%Usage:
+%\begin{TDefinitionTable}
+%$\vect{P}$&change of linear momentum &in& $\si{\kilo\gram\meter\per\second\squared}$\\
+%$m$&mass&in&$\si{\kilo\gram}$\\
+%$\vec{a}$&acceleration&in&$\si{\meter\per\second\squared}$\\
+%$\vec{F}$&resultant force&in&$\si{N}=\si{\kilo\gram\meter\per\second\squared}$
+%\end{TDefinitionTable}
+
+\NewDocumentEnvironment{TValueTable}{} %Used to introduce a series of parameters with certain values
+{
+\footnotesize
+\begin{center}
+\begin{tabular}{r@{ = }lr}
+}
+{
+\end{tabular}
+\end{center}
+\normalsize
+}
+%Usage:
+%\begin{TValueTable}
+%$h_E$&$\SI{32}{\milli\meter}$&Extension of the brakes\\
+%$h_p$&$\SI{32}{\milli\meter}$&Height of a single plate\\
+%$l_B$&$\SI{80}{\milli\meter}$&Width of one brake\\
+%$n_p$&$l_B/l_p=\SI{5}{}$&Number of plates\\
+%$A_p$&$h_p\cdot l_p\cdot n_p=\SI{25.6}{\centi\meter\squared}$&Total area of the plates\\
+%$A_c$&$\SI{26.8}{\centi\meter\squared}$&Actual area of the brake
+%\end{TValueTable}
+
+
+%----------------------------------------------------------------------------------------------
+%Appendices
+%----------------------------------------------------------------------------------------------
+\NewDocumentEnvironment{singlePDFpage}{mmm}
+{
+\includepdf[pages=-,scale=.75,pagecommand={
+\subsection{#1}\label{#2}
+},linktodoc=true]
+{appendix/#3}
+}
+
+\NewDocumentEnvironment{multiPDFpage}{mmm}
+{
+\includepdf[pages=1,scale=.75,pagecommand={
+\subsection{#1}\label{#2}
+},linktodoc=true]
+{appendix/#3}}
+{\includepdf[pages=2-,scale=0.85,pagecommand={},linktodoc=true]{appendix/#3}
+}
