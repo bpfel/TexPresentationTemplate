@@ -1,0 +1,232 @@
+\documentclass[handout,usenames,dvipsnames]{beamer}
+%use [handout] to get rid of uncovered slides
+%Note that when updating the headerfiles xcolor and hyperref need to be removed again to avoid an option clash.
+\usetheme{Boadilla}
+
+\input{../HEADERFILES_FOR_LATEX/PACKAGES}
+\input{../HEADERFILES_FOR_LATEX/ENVIRONMENTS}
+\input{../Presentation/PRESENTATION_ENVIRONMENTS}
+\input{../HEADERFILES_FOR_LATEX/COMMANDS}
+\graphicspath{{./Pictures/}}
+
+\title{Exercise Week 02}
+\author{GianAndrea Müller\\ \url{mailto:muellegi@student.ethz}}
+\date{\today}
+
+\begin{document}
+%Make title page from above supplied information on title, author, etc.
+\maketitle
+
+\begin{TFTimeSchedule}
+\item 3' Nachbesprechung 
+\item 30' Self assessment
+\item 15' Boolsche Variablen und Logische Operatoren mit Übung
+\item 15' Pause
+\item 7' Fehlersuche
+\item 5' Verzweigung mit if
+\item 10' Schleifen mit for mit Übung
+\item 20' Übungsbearbeitung
+\end{TFTimeSchedule}
+
+\begin{TFLearningObjectives}
+\item Verständnis grundlegender Boolscher Algebra
+\item Gebrauch von Verzweigungen und Schleifen
+\item Nutzung einfacher Debugging-Methoden
+\end{TFLearningObjectives}
+
+\begin{frame}{Nachbesprechung}
+\begin{itemize}
+\item Genau lesen!
+\uncover<2->{\item Zweierkomplement (4-bit integer)
+\begin{tabular}{llllll}
+&&&&&$\sum$\\
+Ziffern&1&1&0&1\\
+\uncover<3->{Multiplikator&-8&4&2&1}\\
+\uncover<4->{Wert&-8&4&0&1&-3}\\}
+\end{tabular}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Boolsche Variablen}
+\begin{TFCpp}
+#include <iostream>
+
+using namespace std;
+
+int main (){
+
+	bool b = true;
+	bool c = false;
+	int d = 0;
+	int e = 1;
+	int f = -2;	
+	cout<<int(b)<<int(c)<<endl;
+	cout<<bool(d)<<bool(e)<<bool(f)<<endl;
+
+	return 0;
+}
+\end{TFCpp}
+\end{frame}
+
+\begin{frame}[fragile]{Boolsche Variablen}
+\begin{TFCpp}
+#include <iostream>
+
+using namespace std;
+
+int main (){
+
+	bool b = true;
+	bool c = false;
+	int d = 0;
+	int e = 1;
+	int f = -2;	
+	cout<<(d<1)<<(d<=c)<<(b>c)<<(e!=b);
+
+	return 0;
+}
+\end{TFCpp}
+\end{frame}
+
+\begin{TFTwoColumns}[Logische Operatoren]
+{
+\begin{tabular}{|l|l|l|l|}
+\hline
+x&y&AND(x,y)&OR(x,y)\\\hline
+0&0&\onslide<2->{false&false}\\\hline
+0&1&\onslide<3->{false&true}\\\hline
+1&0&\onslide<4->{false&true}\\\hline
+1&1&\onslide<5->{true&true}\\\hline
+\end{tabular}
+
+\vspace{5ex}
+
+\onslide<9->{
+XOR(x,y)=AND(\textcolor{blue}{OR(x,y)},\textcolor{red}{NOT(AND(x,y))})
+
+\vspace{1ex}
+
+
+\begin{tabular}{|l|l|l|}
+\hline
+x&y&XOR(x,y)\\\hline
+0&0&\onslide<10->{false}\\\hline
+0&1&\onslide<11->{true}\\\hline
+1&0&\onslide<12->{true}\\\hline
+1&1&\onslide<13->{false}\\\hline
+\end{tabular}}
+}
+{
+\onslide<6->{\begin{tabular}{|l|l|}
+\hline
+x&NOT(x)\\\hline
+0&\onslide<7->{true}\\\hline
+1&\onslide<8->{false}\\\hline
+\end{tabular}}
+}
+\end{TFTwoColumns}
+
+\begin{frame}[fragile]{Kurzschlussauswertung}
+
+\begin{TFCpp}
+2 > 3 && 17u - 55 <= ++x % y
+(2>3) && 17u - 55 <= ++x % y
+(false) && 17u - 55 <= ++x % y
+false
+
+
+p>0 || 22 + abs(x) < 100
+(p>0) || 22 + abs(x) < 100
+(true) || 22 + abs(x) < 100
+true
+\end{TFCpp}
+
+\uncover<2->{
+\begin{block}{Good practice}
+Stelle den 'am eifachsten auszuwertenden Ausdruck' immer links von $\&\&$ und $||$ !
+\end{block}
+}
+
+\end{frame}
+
+\begin{frame}[fragile]{Exercise 01\_1 $\sim$ 5'}
+Evaluate the following expression by hand and write down all intermediate steps. You can assume that \verb+x+ is a variable of type \verb+int+ with value 1. 
+
+\vspace{1.5ex}
+
+\begin{enumerate}
+\item \verb+x==1||1/(x-1)<1+
+\item \verb.!(1&&x)+1.
+\end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]{Solution 01\_1}
+\begin{TFCpp}
+x==1||1/(x-1)<1
+1==1||1/(x-1)<1
+true||1/(x-1)<1
+true
+\end{TFCpp}
+\end{frame}
+
+\begin{frame}[fragile]{Solution 01\_1}
+\begin{TFCpp}
+!(1&&x)+1
+!(true&&x)+1
+!(true&&1)+1
+!(true&&true)+1
+!(true)+1
+false+1
+0+1
+1
+\end{TFCpp}
+\end{frame}
+
+\begin{frame}{Fehlersuche}
+\easyurl{Codeboard}{https://codeboard.io/projects/76164}
+\end{frame}
+
+\begin{frame}[fragile]{Verzweigungen mit if}
+\begin{TFCpp}
+if (condition)
+	statement1
+else{
+	statement2
+	statement3
+}
+\end{TFCpp}
+\end{frame}
+
+\begin{frame}[fragile]{Schleifen mit for}
+\begin{TFCpp}
+for(int i = 0; i<10; i = i+2){
+	statement1
+	statement2
+}
+
+
+for(;not_done;){
+	statement1
+}
+\end{TFCpp}
+\uncover<2->{
+\begin{block}{Wichtig}
+\begin{itemize}
+\item Der Ausdruck (i = i+2) wird erst nach den statements ausgeführt!
+\item Eine leere Bedingung entspricht true!
+\end{itemize}
+\end{block}
+}
+
+\end{frame}
+
+\begin{frame}[fragile]{Exercise 02\_2 $\sim$ 5'}
+Write a programm \verb+strangesum.cpp+ that reads a number $n>0$ from standard input and outputs the sum of all positive numbers up to $n$ that are odd but not divisible by 5.
+\end{frame}
+
+\begin{frame}{Solution 02\_2}
+\easyurl{Solution 02\_2}{https://codeboard.io/projects/76167}
+\end{frame}
+\end{document}
+

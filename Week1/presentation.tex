@@ -1,0 +1,308 @@
+\documentclass[handout,usenames,dvipsnames]{beamer}
+%use [handout] to get rid of uncovered slides
+%Note that when updating the headerfiles xcolor and hyperref need to be removed again to avoid an option clash.
+\usetheme{Boadilla}
+
+\input{../HEADERFILES_FOR_LATEX/PACKAGES}
+\input{../HEADERFILES_FOR_LATEX/ENVIRONMENTS}
+\input{../Presentation/PRESENTATION_ENVIRONMENTS}
+\input{../HEADERFILES_FOR_LATEX/COMMANDS}
+\graphicspath{{./Pictures/}}
+
+\title{Exercise Week 01}
+\author{GianAndrea Müller\\ \url{mailto:muellegi@student.ethz}}
+\date{\today}
+
+\begin{document}
+%Make title page from above supplied information on title, author, etc.
+\maketitle
+
+\begin{TFTimeSchedule}
+\item 10' Generelle Information
+\item 15' Ganzzahldivision und Modulo mit Übung
+\item 10' Repetition einfacher Ausdrücke
+\item 15' Binäre Darstellung von Zahlen 
+\item 15' Pause
+\item 40' Übungsbearbeitung
+\end{TFTimeSchedule}
+
+\begin{TFLearningObjectives}
+\item Organisation: Klärung aller Fragen bezüglich der Übungsumgebung.
+\item Verständnis: Ganzzahldivision
+\item Verständnis: Ausdrücke
+\item Verständnis: Binäre Darstellung von Zahlen
+\end{TFLearningObjectives}
+
+\begin{frame}{Allgemeines}
+\begin{itemize}
+\item Selbstverantwortung übernehmen.
+\item Programmieren ist eine Chance.
+\item Let me \easyurl{google}{www.google.com} that for you.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Organisation}
+
+\begin{block}{Wieso Übungen lösen?}
+\begin{itemize}
+\item Erfahrung sammeln.
+\item XP sammeln.
+\item Bonusaufgaben lösen.
+\item 0.25 Notenpunkte gewinnen.
+\end{itemize}
+\end{block}
+
+\vfill
+
+\easyurl{Polybox}{https://polybox.ethz.ch/index.php/s/1bgdJMjROEzGNN6}
+
+\easyurl{First login}{https://expert.ethz.ch/mavt18}
+
+\easyurl{All exercises}{https://expert.ethz.ch/}
+
+\easyurl{C++ reference}{http://www.cplusplus.com}
+
+\easyurl{Hardcore C++ reference}{http://de.cppreference.com/w/}
+\end{frame}
+
+\begin{frame}[fragile]{Ein C++ Programm}
+\begin{TFCpp}
+#include <iostream>
+
+using namespace std;
+
+int main (){
+
+	int a; 
+	int b = 4;
+	cin>>a;
+	cout<<a+b<<endl;
+
+	return 0;
+}
+\end{TFCpp}
+\end{frame}
+
+\begin{frame}[fragile]{Ein C++ Programm}
+\begin{TFCpp}
+#include <iostream> //Bibliothek
+
+using namespace std; //Loesung fuer std::cin, std::cin
+
+int main (){ //Beginn der Hauptfunktion
+
+	int a; //Variabeldefinition ohne Initialisierung
+	int b = 4; //Variabeldefinition mit Initialisierung
+	cin>>a; //Einlesen mit cin>>
+	cout<<a+b<<endl; //Ausgeben mit cout<<
+	//Neue Zeile mit endl
+	return 0;//Rueckgabewert der Hauptfunktion
+}
+\end{TFCpp}
+\end{frame}
+
+\begin{frame}[fragile]{Ganzzahldivision}
+
+\begin{TFCpp}
+using namespace std;
+
+int main (){
+	int a = 6;
+	int b = 4;
+	cout<<a/b<<endl;
+	return 0;
+}
+\end{TFCpp}
+
+\uncover<2>{
+\begin{block}{Keep in mind!}
+Eine Ganzzahldivision löscht die Nachkommastellen.
+\end{block}
+}
+\end{frame}
+
+\begin{frame}[fragile]{Integer division, examples}
+
+\begin{TFCpp}
+using namespace std;
+
+int main (){
+	int a = 6;
+	int b = 4;
+	cout<<b/a<<endl;
+	cout<<1/2<<endl;
+	cout<<double(1)/2<<endl;
+	cout<<1.0/2<<endl;
+	return 0;
+}
+\end{TFCpp}
+\end{frame}
+
+\begin{frame}[fragile]{Ganzzahldivision, Beispiele}
+
+\begin{TFCpp}
+using namespace std;
+
+int main (){
+	int a = 6;
+	int b = 4;
+	cout<<b/a<<endl;	//0
+	cout<<1/2<<endl;	//0
+	cout<<double(1)/2<<endl;	//0.5
+	cout<<1.0/2<<endl;	//0.5
+	return 0;
+}
+\end{TFCpp}
+\end{frame}
+
+
+\begin{frame}[fragile]{Modulo}
+\begin{TFCpp}
+using namespace std;
+
+int main (){
+	int a = 6;
+	int b = 4;
+	cout<<a%b<<endl;
+	return 0;
+}
+\end{TFCpp}
+
+\uncover<2>{
+\begin{block}{Keep in mind!}
+The modulo operation returns the rest of an integer division.
+\end{block}
+\href{https://codeboard.io/projects/75269}{\textcolor{blue}{\underline{Short demonstration}}}
+}
+\end{frame}
+
+\begin{frame}{Exercise 01\_1 $\sim$ 5'}
+Write a program which reads in two integers $a$ and $b$, then calculates the quotient $\frac{a}{b}$ as a mixed expression and outputs it. 
+
+\vspace{1.5ex}
+
+For example, if $a = 17$ and $b = 6$, the output should be $2\ 5/6$.
+\end{frame}
+
+\begin{frame}{Solution 01\_1}
+\href{https://codeboard.io/projects/75270}{\textcolor{blue}{\underline{Solution to 01\_1}}}
+\end{frame}
+
+\begin{frame}{L- und R-Werte}
+\begin{block}{Definition}
+Ein L-Wert ist ein Ausdruck der über eine Adresse im Computerspeicher verfügt und somit auf der linken Seite eines Zuweisungsoperators (=) stehen kann. 
+
+Alle anderen Ausdrücke sind R-Werte.
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]{L- und R-Werte}
+\begin{TFCpp}
+using namespace std;
+
+int main (){
+	int a = 6;
+	int b = 4;
+	//5 = a;
+	//(1+a) = 7;
+	int c = a + b;
+	cout<<a%b<<endl;
+	return 0;
+}
+\end{TFCpp}
+\end{frame}
+
+\begin{frame}[fragile]{Exercise 01\_2 ~5'}
+\begin{block}{Evaluating expressions}
+\begin{enumerate}
+\item Which of the following character sequences are not C++ expressions and why not?
+\begin{enumerate}
+\item \verb+1*(2*3)+
+\item \verb+(a=1)+
+\item \verb+(1+
+\item \verb+(a*3)=(b*5)+
+\end{enumerate}
+\item For all of the expressions that you identified in 1), decide whether these are lvalues or rvalues.
+\item Determine the values of the expressions and explain how these values are obtained.
+\end{enumerate}
+\end{block}
+
+\vfill
+
+\easyurl{Expressions}{http://en.cppreference.com/w/cpp/language/expressions}
+
+\easyurl{Precedence}{http://en.cppreference.com/w/cpp/language/operator_precedence}
+\end{frame}
+
+\begin{frame}[fragile]{Solution 01\_2}
+\easyurl{Solution 01\_2}{https://codeboard.io/projects/75273}
+\end{frame}
+
+\begin{TFTwoColumns}[Binäre Darstellung]{
+\begin{align*}
+91310&=\uncover<2-5>{10*9131+&0}\\
+\uncover<3-5>{9131&=10*913+&1}\\
+\uncover<4-5>{913&=10*91+&3\\
+91&=10*9+&1\\
+9&=10*0+&9}
+\end{align*}
+}
+{
+\begin{align*}
+\uncover<5>{61&=2*30+&1\\
+30&=2*15+&0\\
+15&=2*7+&1\\
+7&=2*3+&1\\
+3&=2*1+&1\\
+1&=2*0+&1}
+\end{align*}
+}
+\end{TFTwoColumns}
+
+\begin{frame}{Binäre Darstellung}
+\begin{tabular}{lllllll}
+&&&&&&$\sum$\\
+Ziffern&9&1&3&1&0\\
+Multiplikator&\uncover<2-4>{10000&1000&100&10&1}\\
+Wert&\uncover<3-4>{90000&1000&300&10&0&91310}
+\end{tabular}
+
+\vfill
+
+\begin{tabular}{llllllll}
+\uncover<4>{&&&&&&&$\sum$\\
+Ziffern&1&1&1&1&0&1\\
+Multiplikator&32&16&8&4&2&1\\
+Wert&32&16&8&4&0&1&61\\}
+\end{tabular}
+\end{frame}
+
+\begin{frame}{Negative Binärzahlen}
+\begin{center}
+\begin{tabular}{rrrrrr}
+bin&uint&int&bin&uint&int\\\midrule
+0000&0&0&1000&8&-8\\
+0001&1&1&1001&9&-7\\
+0010&2&2&1010&10&-6\\
+0011&3&3&1011&11&-5\\
+0100&4&4&1100&12&-4\\
+0101&5&5&1101&13&-3\\
+0110&6&6&1110&14&-2\\
+0111&7&7&1111&15&-1
+\end{tabular}
+\end{center}
+
+\vfill
+
+\easyurl{One's complement}{https://en.wikipedia.org/wiki/Ones\%27_complement} \hfill \easyurl{Demo}{https://codeboard.io/projects/75301} \hfill \easyurl{Two's complement}{https://en.wikipedia.org/wiki/Two\%27s_complement}
+\end{frame}
+
+\begin{frame}{Tips für Exercise 3}
+\begin{itemize}
+\item Serienschaltung von $R_1$ und $R_2$: $R_{tot}=R_1+R_2$
+\item Parallelschaltung von $R_1$ und $R_2$: $R_{tot}=\frac{R_1\cdot R_2}{R_1+R_2}$
+\item Ganzzahlrundung: $1.999 \rightarrow 1$
+\item Arithmetische Rundung: $1.5\rightarrow 2$
+\end{itemize}
+\end{frame}
+\end{document}
