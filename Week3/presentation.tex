@@ -18,215 +18,280 @@
 \maketitle
 
 \begin{TFTimeSchedule}
-\item 3' Nachbesprechung 
-\item 30' Self assessment
-\item 15' Boolsche Variablen und Logische Operatoren mit Übung
-\item 15' Pause
-\item 7' Fehlersuche
-\item 5' Verzweigung mit if
-\item 10' Schleifen mit for mit Übung
-\item 20' Übungsbearbeitung
+\item 5' Nachbesprechung 
+\item 15' while, do while mit Übung
+\item 3' break und continue
+\item 7' Gültigkeitsbereich
+\item 5' float und double mit Übung
+\item 10' Typenumwandlungen mit Übung
+\item 20' Fehlersuche mit assert
 \end{TFTimeSchedule}
 
 \begin{TFLearningObjectives}
-\item Verständnis grundlegender Boolscher Algebra
-\item Gebrauch von Verzweigungen und Schleifen
-\item Nutzung einfacher Debugging-Methoden
+\item Kenntnis aller Schleifen und erweiterte Flusskontrolle
+\item Verständnis aller grundlegenden Variablentypen und deren Umwandlung
+\item Nutzung erweiterter Debugging-Methoden
 \end{TFLearningObjectives}
 
-\begin{frame}{Nachbesprechung}
-\begin{itemize}
-\item Genau lesen!
-\uncover<2->{\item Zweierkomplement (4-bit integer)
-\begin{tabular}{llllll}
-&&&&&$\sum$\\
-Ziffern&1&1&0&1\\
-\uncover<3->{Multiplikator&-8&4&2&1}\\
-\uncover<4->{Wert&-8&4&0&1&-3}\\}
-\end{tabular}
-\end{itemize}
-\end{frame}
-
-
-\begin{frame}[fragile]{Boolsche Variablen}
+\begin{frame}[fragile]{Nachbesprechung}
 \begin{TFCpp}
-#include <iostream>
-
-using namespace std;
-
-int main (){
-
-	bool b = true;
-	bool c = false;
-	int d = 0;
-	int e = 1;
-	int f = -2;	
-	cout<<int(b)<<int(c)<<endl;
-	cout<<bool(d)<<bool(e)<<bool(f)<<endl;
-
-	return 0;
-}
-\end{TFCpp}
-\end{frame}
-
-\begin{frame}[fragile]{Boolsche Variablen}
-\begin{TFCpp}
-#include <iostream>
-
-using namespace std;
-
-int main (){
-
-	bool b = true;
-	bool c = false;
-	int d = 0;
-	int e = 1;
-	int f = -2;	
-	cout<<(d<1)<<(d<=c)<<(b>c)<<(e!=b);
-
-	return 0;
-}
-\end{TFCpp}
-\end{frame}
-
-\begin{TFTwoColumns}[Logische Operatoren]
-{
-\begin{tabular}{|l|l|l|l|}
-\hline
-x&y&AND(x,y)&OR(x,y)\\\hline
-0&0&\onslide<2->{false&false}\\\hline
-0&1&\onslide<3->{false&true}\\\hline
-1&0&\onslide<4->{false&true}\\\hline
-1&1&\onslide<5->{true&true}\\\hline
-\end{tabular}
-
-\vspace{5ex}
-
-\onslide<9->{
-XOR(x,y)=AND(\textcolor{blue}{OR(x,y)},\textcolor{red}{NOT(AND(x,y))})
-
-\vspace{1ex}
-
-
-\begin{tabular}{|l|l|l|}
-\hline
-x&y&XOR(x,y)\\\hline
-0&0&\onslide<10->{false}\\\hline
-0&1&\onslide<11->{true}\\\hline
-1&0&\onslide<12->{true}\\\hline
-1&1&\onslide<13->{false}\\\hline
-\end{tabular}}
-}
-{
-\onslide<6->{\begin{tabular}{|l|l|}
-\hline
-x&NOT(x)\\\hline
-0&\onslide<7->{true}\\\hline
-1&\onslide<8->{false}\\\hline
-\end{tabular}}
-}
-\end{TFTwoColumns}
-
-\begin{frame}[fragile]{Kurzschlussauswertung}
-
-\begin{TFCpp}
-2 > 3 && 17u - 55 <= ++x % y
-(2>3) && 17u - 55 <= ++x % y
-(false) && 17u - 55 <= ++x % y
+8>4>2>1
+true>2>1
+1>2>1
+false>1
+0>1
 false
 
+2<a<4     2<a<4
+true<4    false<4
+1<4       0<4
+true      true
 
-p>0 || 22 + abs(x) < 100
-(p>0) || 22 + abs(x) < 100
-(true) || 22 + abs(x) < 100
-true
-\end{TFCpp}
+2<a && a<4
 
-\uncover<2->{
-\begin{block}{Good practice}
-Stelle den 'am eifachsten auszuwertenden Ausdruck' immer links von $\&\&$ und $||$ !
-\end{block}
-}
-
-\end{frame}
-
-\begin{frame}[fragile]{Exercise 01\_1 $\sim$ 5'}
-Evaluate the following expression by hand and write down all intermediate steps. You can assume that \verb+x+ is a variable of type \verb+int+ with value 1. 
-
-\vspace{1.5ex}
-
-\begin{enumerate}
-\item \verb+x==1||1/(x-1)<1+
-\item \verb.!(1&&x)+1.
-\end{enumerate}
-\end{frame}
-
-\begin{frame}[fragile]{Solution 01\_1}
-\begin{TFCpp}
-x==1||1/(x-1)<1
-1==1||1/(x-1)<1
-true||1/(x-1)<1
-true
+//Comment your code
 \end{TFCpp}
 \end{frame}
 
-\begin{frame}[fragile]{Solution 01\_1}
-\begin{TFCpp}
-!(1&&x)+1
-!(true&&x)+1
-!(true&&1)+1
-!(true&&true)+1
-!(true)+1
-false+1
-0+1
-1
-\end{TFCpp}
-\end{frame}
 
-\begin{frame}{Fehlersuche}
-\easyurl{Codeboard}{https://codeboard.io/projects/76164}
-\end{frame}
-
-\begin{frame}[fragile]{Verzweigungen mit if}
+\begin{frame}[fragile]{Schleifen}
 \begin{TFCpp}
-if (condition)
-	statement1
-else{
-	statement2
-	statement3
-}
-\end{TFCpp}
-\end{frame}
+while(condition)
+	statement
 
-\begin{frame}[fragile]{Schleifen mit for}
-\begin{TFCpp}
-for(int i = 0; i<10; i = i+2){
+
+do{
 	statement1
 	statement2
 }
-
-
-for(;not_done;){
-	statement1
-}
+while(condition);
 \end{TFCpp}
-\uncover<2->{
-\begin{block}{Wichtig}
+\end{frame}
+
+\begin{frame}[fragile]{Exercise 03\_1 $\sim$ 5' $\quad$ All positive numbers up to $n$}
+\begin{TFCpp}
+//loop 1
+for(int i = 1; i<=n; ++i)
+	cout << i << "\n";
+	
+//loop 2
+int i = 0;
+while(i < n)
+	cout<< ++i << "\n";
+	
+//loop 3
+i = 1;
+do
+	cout<<i++<<"\n";
+while (i <= n)
+\end{TFCpp}
+\end{frame}
+
+\begin{frame}[fragile]{Solution 03\_1}
+\begin{TFCpp}
+//if n == INT_MAX -> infinite loop
+for(int i = 1; i<=n; ++i)
+	cout << i << "\n";
+	
+//loop 2
+int i = 0;
+while(i < n)
+	cout<< ++i << "\n";
+	
+//n<= 0 -> still outputs 1, if n=INT_MAX -> infinite loop
+i = 1;
+do
+	cout<<i++<<"\n";
+while (i <= n)
+\end{TFCpp}
+\end{frame}
+
+\begin{frame}{Welche Schleife in welchen Fall?}
+\begin{block}{Motivation}
 \begin{itemize}
-\item Der Ausdruck (i = i+2) wird erst nach den statements ausgeführt!
-\item Eine leere Bedingung entspricht true!
+\item So wenig code wie möglich.
+\item Einfach lesbarer code.
 \end{itemize}
 \end{block}
+\begin{block}{Möglichkeiten}
+\begin{itemize}
+\item \textbf{for}: Es wird ein Zähler benötigt, Zähler wird nach der Schleife nicht mehr benötigt.
+
+\emph{Wiederhole ein statement $n$ mal.}
+\item \textbf{while}: Die Bedingung hängt von einer Variable ab, die bereits vor der Schleife existiert.
+
+\emph{Dekrementiere $x$ bis es ein Vielfaches von 5 ist.}
+\item \textbf{do}: Die Bedingung hängt von einer Variable ab, die erst in der Schleife erhalten wird.
+
+\emph{Führe $cin>>x$ aus bis $x>3$}
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]{$break$ und $continue$}
+\begin{TFCpp}
+while(true){
+	statement1;
+	if(condition){
+		break;
+	}
 }
 
+for (int i = 0; i < 10; i++){
+	statement1;
+	if(condition){
+		continue;
+	}
+	statement2;
+}
+\end{TFCpp}
 \end{frame}
 
-\begin{frame}[fragile]{Exercise 02\_2 $\sim$ 5'}
-Write a programm \verb+strangesum.cpp+ that reads a number $n>0$ from standard input and outputs the sum of all positive numbers up to $n$ that are odd but not divisible by 5.
+\begin{frame}[fragile]{Gültigkeitsbereich - Scope}
+\begin{TFCpp}
+if (x < 7) {
+int a=8;
+}
+std::cout << a; // Compiler error, a does not exist.
+\end{TFCpp}
 \end{frame}
 
-\begin{frame}{Solution 02\_2}
-\easyurl{Solution 02\_2}{https://codeboard.io/projects/76167}
+\begin{frame}[fragile]{Gültigkeitsbereich - Scope}
+\begin{TFCpp}
+int a = 2;
+if (x < 7) {
+a=8;
+}
+std::cout << a; // Outputs 2 or 8, depending on the if-statement.
+\end{TFCpp}
 \end{frame}
+
+
+\begin{frame}[fragile]{Gültigkeitsbereich - Scope}
+\begin{TFCpp}
+for (int i = 0; i < 5; ++i) {
+std::cout << i << "\n"; // Outputs i
+}
+std::cout << i << "\n"; // Compiler error, i does not exist
+\end{TFCpp}
+\end{frame}
+
+\begin{frame}[fragile]{Gültigkeitsbereich - Scope}
+\begin{TFCpp}
+unsigned int x = 2;
+int i = 5;
+if (x > 1) {
+int i = 3;
+std::cout << i; // outputs 3
+}
+std::cout << i; // outputs 5
+\end{TFCpp}
+\end{frame}
+
+\begin{frame}[fragile]{$float$ und $double$}
+
+\vspace{-3ex}
+
+\begin{equation*}
+\pm \underbrace{3.4}_{\sim\text{ 7 Stellen}}\cdot 10^{\pm 38} \qquad\qquad\qquad\qquad\pm \underbrace{1.7}_{\sim\text{ 15 Stellen}}\cdot 10^{\pm 308}
+\end{equation*}
+
+\vspace{3ex}
+
+\begin{TFCpp}
+float a = 1.0/6.0;
+double b = 2/5;
+
+cout << a; //outputs 0.166666672
+
+float c = (a - 0.1)*10;
+
+cout << c; //outputs 0.666666746
+\end{TFCpp}
+
+\vfill
+
+\easyurl{Datentypen}{http://en.cppreference.com/w/cpp/language/types}
+\end{frame}
+
+\begin{frame}[fragile]{Typenumwandlung}
+\begin{center}
+\textcolor{blue}{char, bool $<$ int $<$ unsigned int $<$ float $<$ double}
+\end{center}
+\end{frame}
+
+\begin{frame}[fragile]{Typenumwandlung}
+\begin{TFCpp}
+#include <iostream>
+
+int main()
+{
+   int a = -4;
+   unsigned int b = 2u;
+
+   std::cout << a + b; //output: 4294967294
+   std::cout << int(a+b); //output: -2
+   
+   unsigned int c = a;
+
+   return 0;
+}
+\end{TFCpp}
+\end{frame}
+
+\begin{frame}[fragile]{Exercise 03\_2 $\sim$ 5'}
+\begin{block}{Evaluate by hand. Assume $x = 1$ is of type $int$}
+\begin{enumerate}
+\item \verb,3.0 + 3 - 4 + 5,
+\item \verb,5 % 4 * 3.0 + true * x++,
+\item \verb,- 3 - 4u + 8.0,
+\end{enumerate}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Solution 03\_2 $\sim$ }
+\begin{block}{Solution (1)}
+\begin{enumerate}
+\item \verb,3.0 + 3 - 4 + 5,
+\item \verb,((3.0 + 3) - 4) + 5,
+\item \verb,((3.0 + 3.0) - 4) + 5,
+\item \verb,(6.0 - 4) + 5,
+\item \verb,(6.0 - 4.0) + 5,
+\item \verb,2.0 + 5,
+\item \verb,2.0 + 5.0,
+\item \verb,7.0,
+\end{enumerate}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Solution 03\_2 $\sim$ }
+\begin{block}{Solution (2)}
+\begin{enumerate}
+\item \verb,- 3 - 4u + 8.0,
+\item \verb,(4294967283u - 4u) + 8.0,
+\item \verb,4294967289u + 8.0,
+\item \verb,4294967289.0 + 8.0,
+\item \verb,4294967297.0,
+\end{enumerate}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Solution 03\_2 $\sim$ }
+\begin{block}{Solution (1)}
+\begin{enumerate}
+\item \verb,5 % 4 * 3.0 + true * x++,
+\item \verb,((5 % 4) * 3.0) + (true * (x++)),
+\item \verb,(1 * 3.0) + (true * (x++)),
+\item \verb,(1.0 * 3.0) + (true * (x++)),
+\item \verb,3.0 + (true * (x++)),
+\item \verb,3.0 + (true * 1),
+\item \verb,3.0 + (1 * 1),
+\item \verb,3.0 + 1,
+\item \verb,3.0 + 1.0,
+\item \verb,4.0,
+\end{enumerate}
+\end{block}
+\end{frame}
+
 \end{document}
 
