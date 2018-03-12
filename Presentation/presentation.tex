@@ -1,5 +1,22 @@
-\documentclass[usenames,dvipsnames]{beamer}
-%Note that when updating the headerfiles xcolor and hyperref need to be removed again to avoid an option clash.
+%===========================================================================
+%generation of assignment and solution in one .tex file. make sure that write18 is activated(--enable-write18 for example as you call pdflatex.exe)
+
+%First: if condition to execute the first case. Checked condition: if the global variable \conditionmacro is undefined. This is always true.
+\ifx\conditionmacro\undefined
+%Thus latex enters the if statement and execute a write18 command immediately which is like putting "pdfLaTeX -- ...." to the console, thus building latex for the first time. After that \conditionmacro is defined as 1 which causes the \ifnum condition further below to be executed.
+\immediate\write18{%
+	pdfLaTeX --jobname="presentation_handout"
+	\gdef\string\conditionmacro{1}\string\input\space\jobname
+}%
+%after this first execution your editor is taking charge of the second build for which conditionmacro is defined as 2.
+\gdef\conditionmacro{2}
+%\expandafter\stop
+\fi
+%---------------------------------------------------------------------------
+
+\ifnum\conditionmacro=1 \documentclass[handout,usenames,dvipsnames]{beamer}\fi
+\ifnum\conditionmacro=2 \documentclass[usenames,dvipsnames]{beamer} \fi
+
 \usetheme{Boadilla}
 
 \input{../HEADERFILES_FOR_LATEX/PACKAGES}
@@ -106,6 +123,17 @@ Lorem ipsum bla.
 %Comment
 \end{document}
 \end{TFLatex}
+\end{frame}
+
+%Showcase for the handout with itemize and multiple slides uncovering content
+\begin{frame}{Itemize showcase for the handout}
+\begin{block}{Some items}
+\begin{itemize}
+\item bla
+\item<2-> bli
+\item<3-> blu
+\end{itemize}
+\end{block}
 \end{frame}
 
 \end{document}
