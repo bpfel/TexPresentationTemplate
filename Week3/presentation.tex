@@ -1,6 +1,18 @@
-\documentclass[handout,usenames,dvipsnames]{beamer}
-%use [handout] to get rid of uncovered slides
-%Note that when updating the headerfiles xcolor and hyperref need to be removed again to avoid an option clash.
+%===========================================================================
+%generation of assignment and solution in one .tex file. make sure that write18 is activated(--enable-write18 for example as you call pdflatex.exe)
+\ifx\conditionmacro\undefined 
+\immediate\write18{%
+	pdfLaTeX --jobname="presentation_handout"
+	\gdef\string\conditionmacro{1}\string\input\space\jobname
+}%
+\gdef\conditionmacro{2}
+%\expandafter\stop
+\fi
+%---------------------------------------------------------------------------
+
+\ifnum\conditionmacro=1 \documentclass[handout,usenames,dvipsnames]{beamer}\fi
+\ifnum\conditionmacro=2 \documentclass[usenames,dvipsnames]{beamer} \fi
+
 \usetheme{Boadilla}
 
 \input{../HEADERFILES_FOR_LATEX/PACKAGES}
@@ -9,7 +21,7 @@
 \input{../HEADERFILES_FOR_LATEX/COMMANDS}
 \graphicspath{{./Pictures/}}
 
-\title{Exercise Week 02}
+\title{Exercise Week 03}
 \author{GianAndrea Müller\\ \url{mailto:muellegi@student.ethz}}
 \date{\today}
 
@@ -249,46 +261,47 @@ int main()
 \end{block}
 \end{frame}
 
-\begin{frame}[fragile]{Solution 03\_2 $\sim$ }
+\begin{frame}[fragile]{Solution 03\_2}
 \begin{block}{Solution (1)}
 \begin{enumerate}
 \item \verb,3.0 + 3 - 4 + 5,
-\item \verb,((3.0 + 3) - 4) + 5,
-\item \verb,((3.0 + 3.0) - 4) + 5,
-\item \verb,(6.0 - 4) + 5,
-\item \verb,(6.0 - 4.0) + 5,
-\item \verb,2.0 + 5,
-\item \verb,2.0 + 5.0,
-\item \verb,7.0,
+\item<2-> \verb,((3.0 + 3) - 4) + 5,
+\item<3-> \verb,((3.0 + 3.0) - 4) + 5,
+\item<4-> \verb,(6.0 - 4) + 5,
+\item<5-> \verb,(6.0 - 4.0) + 5,
+\item<6-> \verb,2.0 + 5,
+\item<7-> \verb,2.0 + 5.0,
+\item<8-> \verb,7.0,
 \end{enumerate}
 \end{block}
 \end{frame}
 
-\begin{frame}[fragile]{Solution 03\_2 $\sim$ }
+
+\begin{frame}[fragile]{Solution 03\_2}
 \begin{block}{Solution (2)}
 \begin{enumerate}
 \item \verb,- 3 - 4u + 8.0,
-\item \verb,(4294967283u - 4u) + 8.0,
-\item \verb,4294967289u + 8.0,
-\item \verb,4294967289.0 + 8.0,
-\item \verb,4294967297.0,
+\item<2-> \verb,(4294967283u - 4u) + 8.0,
+\item<3-> \verb,4294967289u + 8.0,
+\item<4-> \verb,4294967289.0 + 8.0,
+\item<5-> \verb,4294967297.0,
 \end{enumerate}
 \end{block}
 \end{frame}
 
-\begin{frame}[fragile]{Solution 03\_2 $\sim$ }
-\begin{block}{Solution (1)}
+\begin{frame}[fragile]{Solution 03\_2}
+\begin{block}{Solution (3)}
 \begin{enumerate}
 \item \verb,5 % 4 * 3.0 + true * x++,
-\item \verb,((5 % 4) * 3.0) + (true * (x++)),
-\item \verb,(1 * 3.0) + (true * (x++)),
-\item \verb,(1.0 * 3.0) + (true * (x++)),
-\item \verb,3.0 + (true * (x++)),
-\item \verb,3.0 + (true * 1),
-\item \verb,3.0 + (1 * 1),
-\item \verb,3.0 + 1,
-\item \verb,3.0 + 1.0,
-\item \verb,4.0,
+\item<2-> \verb,((5 % 4) * 3.0) + (true * (x++)),
+\item<3-> \verb,(1 * 3.0) + (true * (x++)),
+\item<4-> \verb,(1.0 * 3.0) + (true * (x++)),
+\item<5-> \verb,3.0 + (true * (x++)),
+\item<6-> \verb,3.0 + (true * 1),
+\item<7-> \verb,3.0 + (1 * 1),
+\item<8-> \verb,3.0 + 1,
+\item<9-> \verb,3.0 + 1.0,
+\item<10-> \verb,4.0,
 \end{enumerate}
 \end{block}
 \end{frame}
