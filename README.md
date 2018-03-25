@@ -10,6 +10,7 @@ LaTeX presentations look nice, but setting them up is sometimes not as intuitive
 4. Picture slide
 5. Code slide with nice listing for different languages, content aware coloring of code
 6. Easy url's.
+7. Parallel building of handout and presentation slides.
 
 # How
 

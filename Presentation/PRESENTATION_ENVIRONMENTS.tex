@@ -84,7 +84,7 @@
 \end{frame}
 }
 %Usage:
-%\begin{TPTwoColumns}[Title]
+%\begin{TFTwoColumns}[Title]
 %{content on the left}
 %{and also content on the right}
 %\end{TPTwoColumns}
@@ -168,6 +168,17 @@ morekeywords={nvim, ls}
 	\centering\minipage{.9\textwidth}%
 }{
 	\endminipage%
+}
+
+\lstnewenvironment{TPCpp}[1][]{
+	\vspace{3ex}
+	\lstset{caption={#1}}
+	\lsgeneral
+	\lscpp
+	\centering\minipage{.9\textwidth}%
+}{
+	\endminipage%
+	\vspace{3ex}
 }
 
 \newcommand{\lspython}{\lstset{
