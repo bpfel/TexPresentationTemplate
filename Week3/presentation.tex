@@ -31,12 +31,13 @@
 
 \begin{TFTimeSchedule}
 \item 5' Nachbesprechung 
-\item 15' while, do while mit Übung
-\item 3' break und continue
-\item 7' Gültigkeitsbereich
-\item 5' float und double mit Übung
-\item 10' Typenumwandlungen mit Übung
-\item 20' Fehlersuche mit assert
+\item 15'while, do while mit Übung
+\item 5' break und continue
+\item 10' Gültigkeitsbereich
+\item 5' float und double
+\item 15' Pause
+\item 15' Typenumwandlungen mit Übung
+\item 30' Übungsbearbeitung
 \end{TFTimeSchedule}
 
 \begin{TFLearningObjectives}
@@ -245,6 +246,25 @@ int main()
    std::cout << int(a+b); //output: -2
    
    unsigned int c = a;
+
+   return 0;
+}
+\end{TFCpp}
+\end{frame}
+
+\begin{frame}[fragile]{Typenumwandlung}
+\begin{TFCpp}
+#include <iostream>
+
+int main()
+{
+   int a = -4;
+   unsigned int b = 2u;
+
+   std::cout << a + b; //output: 4294967294
+   std::cout << int(a+b); //output: -2
+   
+   unsigned int c = a; //output: 4294967292
 
    return 0;
 }

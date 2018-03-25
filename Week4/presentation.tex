@@ -1,0 +1,370 @@
+%===========================================================================
+%generation of assignment and solution in one .tex file. make sure that write18 is activated(--enable-write18 for example as you call pdflatex.exe)
+
+\ifx\conditionmacro\undefined 
+\immediate\write18{%
+	pdfLaTeX --jobname="presentation_handout"
+	\gdef\string\conditionmacro{1}\string\input\space\jobname
+}%
+\immediate\write18{%
+	pdfLaTeX --jobname="presentation_with_notes"
+	\gdef\string\conditionmacro{3}\string\input\space\jobname
+}%
+\gdef\conditionmacro{2}
+%\expandafter\stop
+\fi
+%---------------------------------------------------------------------------
+
+\ifnum\conditionmacro=1 \documentclass[handout,usenames,dvipsnames]{beamer}\fi
+\ifnum\conditionmacro=2 \documentclass[usenames,dvipsnames]{beamer} \fi
+\ifnum\conditionmacro=3 \documentclass[notes,handout,usenames,dvipsnames]{beamer}
+\usepackage{pgfpages}
+\setbeameroption{show notes on second screen=left} \fi
+
+\usetheme{Boadilla}
+
+\input{../HEADERFILES_FOR_LATEX/PACKAGES}
+\input{../HEADERFILES_FOR_LATEX/ENVIRONMENTS}
+\input{../Presentation/PRESENTATION_ENVIRONMENTS}
+\input{../HEADERFILES_FOR_LATEX/COMMANDS}
+\graphicspath{{./Pictures/}}
+
+\title{Exercise Week 04}
+\author{GianAndrea Müller\\ \url{mailto:muellegi@student.ethz}}
+\date{\today}
+
+\begin{document}
+%Make title page from above supplied information on title, author, etc.
+\maketitle
+
+\begin{TFTimeSchedule}
+\item 3' Nachbesprechung 
+\item 10' Dezimalzahlen im Binärsystem mit Übung
+\item 10' Fliesskommasystem $\mathcal{F}^\ast(2,24,-126,127)$
+\item 10' Tips zu Fliesskommazahlen
+\item 10' Funktionen
+\item 15' Pause
+\item 10' Funktionsdefinition- und deklaration
+\item 10' Pre- and post-conditions
+\item 10' Übung zu Funktionen
+\end{TFTimeSchedule}
+
+\begin{TFLearningObjectives}
+\item Verständnis des Fliesskommasystems
+\item Nutzung von Funktionen
+\end{TFLearningObjectives}
+
+\begin{frame}{Nachbesprechung}
+\begin{itemize}
+\item Kommentieren heisst nicht: \textcolor{green}{Dasselbe in grün.}
+\item Snippets: Verständnis zeigen!
+\end{itemize}
+\end{frame}
+
+\note{
+\begin{itemize}
+\item Ein Kommentar übermittelt Verständnis der Semantik 
+
+und nicht der Syntax. Wieso nicht Was.
+\item Man sollte versuchen, den Zweck des Snippets 
+
+zu verstehen. Wichtig für die Prüfung!
+\end{itemize}
+}
+
+\begin{frame}{Dezimalzahlen im Binärsystem}
+\begin{center}
+\begin{tabular}{ll|l|l|l|l|l|l|l}
+binär:&1&1&1&1&.&1&1&1\\\hline
+dezimal:&8&4&2&1&&$\frac{1}{2}$&$\frac{1}{4}$&$\frac{1}{8}$
+\end{tabular}
+\end{center}
+\end{frame}
+
+\begin{TFTwoColumns}[Dezimalzahlen im Binärsystem]
+{
+\begin{center}
+\begin{tabular}{l|l|l}
+$x$&$d_i$&$x-d_i$\\\hline
+1.934&1&0.934\\
+\uncover<2->{9.34&9&0.34\\}
+\uncover<3->{3.4&3&0.4\\
+4&4&0}
+\end{tabular}
+\end{center}
+}
+{
+\begin{center}
+\uncover<4->{
+\begin{tabular}{r|l|l}
+$x$&$b_i$&$x-b_i$\\\hline
+1.9&1&0.9\\
+\uncover<5->{1.8&1&0.8\\}
+\uncover<6->{\textbf{1.6}&1&0.6\\}
+\uncover<7->{1.2&1&0.2\\}
+\uncover<8->{0.4&0&0.8\\}
+\uncover<9->{\textbf{1.6}&1&0.6\\}
+\uncover<10->{&$\vdots$&}
+\end{tabular}}
+\end{center}
+\uncover<11->{\begin{equation*}
+1.1\overline{1100}
+\end{equation*}}
+}
+\end{TFTwoColumns}
+
+\note{
+\begin{itemize}
+\item Erklärung im Dezimalsystem
+\begin{enumerate}
+\item Stelle abziehen.
+\item Verschiebung mit mal 10.
+\end{enumerate}
+\item Erklärung im Binärsystem
+\begin{enumerate}
+\item Stelle abziehen.
+\item Verschiebung mit mal 2.
+\end{enumerate}
+\item Zusatzinfo: Es git also Zahlen, die in bestimmten Zahlensystemen keine \textbf{finite Darstellung} haben!
+\end{itemize}
+}
+
+\begin{frame}{Exercise 4\_1 $\sim$ 2'}
+\begin{block}{Berechne die binäre Darstellung folgender Dezimalzahlen:}
+\begin{enumerate}
+\item 0.25
+\item 11.1
+\end{enumerate}
+\end{block}
+\end{frame}
+
+\begin{TFTwoColumns}[Solution 4\_1]
+{
+\begin{block}{Lösung 1.}
+\begin{tabular}{r|l|l}
+$x$&$b_i$&$x-b_i$\\\hline
+0.25&0&0.25\\
+0.5&0&0.5\\
+1&1&0
+\end{tabular}
+\end{block}
+}
+{
+\begin{block}{Lösung 2.}
+\begin{tabular}{r|l|l}
+$x$&$b_i$&$x-b_i$\\\hline
+0.1&0&0.1\\
+0.2&0&0.2\\
+0.4&0&0.4\\
+0.8&0&0.8\\
+1.6&1&0.6\\
+1.2&1&0.2\\
+&$\vdots$&
+\end{tabular}
+\end{block}
+}
+\end{TFTwoColumns}
+
+\begin{frame}{Unser kleines 10bit Fliesskommasystem}
+\begin{block}{Beschreibung von Fliesskommasystemen}
+$\mathcal{F}(\underbrace{\beta}_\text{Basis $\geq$ 2},\overbrace{p}^\text{Anzahl Stellen$\geq$1},\underbrace{e_{min},e_{max}}_\text{Kleinster und Grösster Exponent})$
+\end{block}
+\end{frame}
+
+\begin{frame}{Unser kleines 10bit Fliesskommasystem}
+\begin{Huge}
+\[{\color<2->{red}{0}}{\color<4->{green}{0000}}{\color<3->{blue}{00000}}\]
+\end{Huge}
+\begin{itemize}
+\item<2-> \textcolor{red}{Vorkommastelle}
+\item<3-> \textcolor{blue}{Nachkommastellen}
+\item<4-> \textcolor{green}{Exponent}
+\end{itemize}
+\end{frame}
+
+\note{\begin{itemize}
+\item Erste Idee: $2.73\cdot10^{12}$
+\item Genau ein Stelle, also 1 bit vor dem Komma
+\item 5 bits für Nachkommastellen
+\item 4 bits für den Exponenten
+\item Anwenden des Bezeichnungsschemas
+\end{itemize}
+}
+
+\begin{frame}{$\mathcal{F}(2,6,0,15)$}
+\begin{Huge}
+\[{\color{red}{0}}{\color{green}{0000}}{\color{blue}{00000}}\]
+\end{Huge}
+\begin{itemize}
+\item\textcolor{red}{Vorkommastelle}
+\item\textcolor{blue}{Nachkommastellen}
+\item\textcolor{green}{Exponent}
+\end{itemize}
+\begin{block}{Beispiele}
+$\underbrace{\textcolor{red}{1}.\textcolor{blue}{11111}\cdot 2^{\textcolor{green}{15}}}_\text{Grösste Zahl}\qquad\qquad\underbrace{\textcolor{red}{0}.\textcolor{blue}{00001}\cdot 2^{\textcolor{green}{0}}}_\text{Kleinste Zahl}$
+\end{block}
+\end{frame}
+
+\note{\begin{itemize}
+\item Wir möchten auch negative Exponenten.
+\item Interpretation als unsigned int mit Verschiebung ins negative (IEEE 754 Standard), schnellere Rechnungen möglich)
+\item 
+\end{itemize}}
+
+\begin{frame}{$\mathcal{F}(2,6,-8,7)$}
+\begin{Huge}
+\[{\color{red}{0}}{\color{green}{0000}}{\color{blue}{00000}}\]
+\end{Huge}
+\begin{itemize}
+\item\textcolor{red}{Vorkommastelle}
+\item\textcolor{blue}{Nachkommastellen}
+\item\textcolor{green}{Exponent}
+\end{itemize}
+\begin{block}{Beispiele}
+$\underbrace{\textcolor{red}{1}.\textcolor{blue}{11111}\cdot 2^{\textcolor{green}{7}}}_\text{Grösste Zahl}\qquad\qquad\underbrace{\textcolor{red}{0}.\textcolor{blue}{00001}\cdot 2^{\textcolor{green}{-8}}}_\text{Kleinste Zahl}$
+\end{block}
+\end{frame}
+
+\note{
+\begin{itemize}
+\item Wir brauchen negative Zahlen!
+\item Wir brauchen das erste Bit nicht zwingend wenn wir annehmen, dass es immer 1 ist.
+\end{itemize}
+}
+
+\begin{frame}{$\mathcal{F}^\ast(2,6,-8,7)$}
+\begin{Huge}
+\[{\color{red}{0}}{\color{green}{0000}}{\color{blue}{00000}}\]
+\end{Huge}
+\begin{itemize}
+\item\textcolor{red}{Vorzeichenstelle}
+\item\textcolor{blue}{Nachkommastellen}
+\item\textcolor{green}{Exponent}
+\end{itemize}
+\begin{block}{Beispiele}
+
+$\underbrace{\textcolor{red}{+}1.\textcolor{blue}{11111}\cdot 2^{\textcolor{green}{7}}}_\text{Grösste Zahl}\qquad\qquad \underbrace{\textcolor{red}{-}1.\textcolor{blue}{11111}\cdot2^{\textcolor{green}{7}}}_\text{Kleinste Zahl}\qquad\qquad\underbrace{\textcolor{red}{+}1.\textcolor{blue}{00000}\cdot2^{\textcolor{green}{-8}}}_\text{Kleinste positive Zahl}$
+
+\end{block}
+\end{frame}
+
+\note{\begin{itemize}
+\item Wir können 0 nicht mehr darstellen
+\item Ein Exponent für spezielle Zahlen: -8 = 0000
+\item Und die Nachkommastellen als Codierung für diese Zahlen
+\end{itemize}
+}
+\begin{frame}{$\mathcal{F}^\ast(2,6,-7,7)$}
+\begin{Huge}
+\[{\color{red}{0}}{\color{green}{0000}}{\color{blue}{00000}}\]
+\end{Huge}
+\begin{itemize}
+\item\textcolor{red}{Vorzeichenstelle}
+\item\textcolor{blue}{Nachkommastellen}
+\item\textcolor{green}{Exponent}
+\end{itemize}
+\begin{block}{Beispiele}
+\begin{center}
+$\underbrace{\textcolor{red}{0}\textcolor{green}{0000}\textcolor{blue}{00000}}_\text{Null}\qquad \underbrace{\textcolor{red}{0}\textcolor{green}{0000}\textcolor{blue}{00001}}_{+\infty}\qquad\underbrace{\textcolor{red}{0}\textcolor{green}{0000}\textcolor{blue}{00010}}_{-\infty}\qquad\underbrace{\textcolor{red}{0}\textcolor{green}{0000}\textcolor{blue}{00011}}_\text{NaN}$
+\end{center}
+\end{block}
+\end{frame}
+
+\note{
+\begin{itemize}
+\item Wir können 0 nicht mehr darstellen
+\item Ein Exponent für spezielle Zahlen: -8 = 0000
+\item Und die Nachkommastellen als Codierung für diese Zahlen
+\item Jetzt verstehen wir auch 32bit float und 64bit double
+\end{itemize}
+}
+
+\begin{frame}{Exercise 4\_2 $\sim$ 5'}
+\begin{block}{Floating point systems following IEEE 754}
+\begin{itemize}
+\item float (IEEE 745): $\mathcal{F}^\ast(2,24,-126,127)$
+\item double (IEEE 745): $\mathcal{F}^\ast(2,53,-1022,1023)$
+\end{itemize}
+\begin{enumerate}
+\item What is the largest possible normalized single and double precision floating point number?
+\item What is the smallest possible normalized single and double precision floatig point number?
+\end{enumerate}
+\end{block}
+\end{frame}
+
+\begin{frame}{Solution 4\_2}
+\begin{block}{Floating point systems following IEEE 754}
+\begin{enumerate}
+\item Smallest normalized number: $2^{e_{min}}$
+\item Largest normalized number, float: $+1.11111111111111111111111\cdot2^{127}$
+\end{enumerate}
+\uncover<2->{\[\left(1-\left(\frac{1}{\beta}\right)^p\right)\beta^{e_{max}+1}\]}
+\end{block}
+\end{frame}
+
+\begin{frame}{Solution 4\_2}
+\begin{block}{$\mathcal{F}^\ast(2,6,-7,7)$}
+\begin{enumerate}
+\item Grösste positive Zahl: 
+
+\[1.11111\cdot 2^{7}\]
+\item Das entspricht:
+\[11111100\]
+\item Grösste positive Zahl mit 8bit: $2^8-1$
+\item Grösste positive Zahl mit 2bit: $2^2-1$
+\item Mit variablen:
+\begin{align*}(\beta^{e_{max}+1}-1)-(\beta^{e_{max}+1-p}-1) = (\beta^{e_{max}+1}-\beta^{e_{max}+1-p})\\=\left(1-\left(\frac{1}{2}\right)^p\right)\beta^{e_{max}+1}\end{align*}
+\end{enumerate}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Tipps zu Fliesskommazahlen}
+\begin{TFCpp}
+//Kein Vergleich gerundeter Zahlen
+double  a = 1.1; 
+if(100*a == 110) cout<<true<<endl;
+
+//Keine Add. versch. grosser Zahlen
+float a = 67108864.0f + 1.0f 
+//output: 67108864
+
+//Keine Subtr. aehnlich grosser Zahlen
+float x_0 = 0.2; 
+//represented as: 0.20000000298
+float x_1 = 6*x_0 - 1; //is not 0.2
+\end{TFCpp}
+\end{frame}
+
+\begin{frame}[fragile]{Funktionsdefinition und -deklaration}
+\begin{TFCpp}
+void g (...); //declaration of g
+
+void f (...)
+{
+	g(...);
+}
+
+void g (...) // definition of g
+{
+	f(...);
+}
+\end{TFCpp}
+\end{frame}
+
+\begin{frame}[fragile]{PRE- und POST-Bedingungen}
+\begin{TFCpp}
+#include <cmath>
+
+int main(){
+	// PRE: Value representing angle expressed in radians
+	// POST: Cosine of x
+	// double cos(double x);
+	
+	double x = M_PI;
+	double result = cos(M_PI);
+}
+\end{TFCpp}
+\end{frame}
+
+\end{document}
+
