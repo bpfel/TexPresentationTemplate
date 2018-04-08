@@ -1,0 +1,370 @@
+%===========================================================================
+%generation of assignment and solution in one .tex file. make sure that write18 is activated(--enable-write18 for example as you call pdflatex.exe)
+%\gdef\conditionmacro{2}
+\ifx\conditionmacro\undefined 
+\immediate\write18{%
+	pdfLaTeX --jobname="presentation_handout"
+	\gdef\string\conditionmacro{1}\string\input\space\jobname
+}%
+\immediate\write18{%
+	pdfLaTeX --jobname="presentation_with_notes"
+	\gdef\string\conditionmacro{3}\string\input\space\jobname
+}%
+\gdef\conditionmacro{2}
+%\expandafter\stop
+\fi
+%---------------------------------------------------------------------------
+
+\ifnum\conditionmacro=1 \documentclass[handout,usenames,dvipsnames]{beamer}\fi
+\ifnum\conditionmacro=2 \documentclass[usenames,dvipsnames]{beamer} \fi
+\ifnum\conditionmacro=3 \documentclass[notes,handout,usenames,dvipsnames]{beamer}
+\usepackage{pgfpages}
+\setbeameroption{show notes on second screen=left} \fi
+
+\usetheme{Boadilla}
+
+\input{../HEADERFILES_FOR_LATEX/PACKAGES}
+\input{../HEADERFILES_FOR_LATEX/ENVIRONMENTS}
+\input{../Presentation/PRESENTATION_ENVIRONMENTS}
+\input{../HEADERFILES_FOR_LATEX/COMMANDS}
+\graphicspath{{./Pictures/}}
+
+\title{Exercise Week 06}
+\author{GianAndrea Müller\\ \url{mailto:muellegi@student.ethz}}
+\date{\today}
+
+\begin{document}
+%Make title page from above supplied information on title, author, etc.
+\maketitle
+
+\begin{TFTimeSchedule} 
+\item 5' Nachbesprechung
+\item 10' Referenzen
+\item 10' Statische Arrays
+\item 15' Vektoren
+\item 5' Schriftzeichen
+\end{TFTimeSchedule}
+
+\begin{TFLearningObjectives}
+\item Kenntnis des Nutzens von Referenzen
+\item Verständnis der Grenzen des Arrays und Kenntnis möglicher Alternativen
+\end{TFLearningObjectives}
+
+\begin{frame}[fragile]{Referenzen II}
+\begin{TFCpp}
+void try_to_increment (int m) {
+	m = m + 1;
+}
+
+void increment (int& m) {
+m = m + 1;
+}
+\end{TFCpp}
+\end{frame}
+
+\note{
+\begin{itemize}
+\item Wir haben letze Woche gesehen wie nützlich
+call by reference sein kann.
+\item Jetzt sehen wir uns als Beispiel einer
+weiteren Anwendung von Referenzen die Implementation
+der Inkrement-Operatoren an.
+\end{itemize}
+}
+
+\begin{frame}[fragile]{Referenzen II}
+\begin{TFCpp}
+//pre-increment
+int& operator++(int& a){
+	a = a + 1;
+	return a;
+}
+
+//post-increment
+int operator++(int& a){
+	int temp = a;
+	a = a + 1;
+	return temp;
+}
+\end{TFCpp}
+\end{frame}
+
+\note{
+\begin{itemize}
+\item Das pre-increment gibt direkt die inkrementierte Variable als l-value zurück.
+\item Das post-increment gibt den Wert der nicht-inkrementierten Variable als r-value zurück.
+\end{itemize}
+}
+
+\begin{frame}[fragile]{Referenzen II}
+\begin{TFCpp}
+//pre-increment: return by reference
+int& operator++(int& a){
+	a = a + 1;
+	return a;
+}
+
+//post-increment: return by value
+int operator++(int& a){
+	int temp = a;
+	a = a + 1;
+	return temp;
+}
+\end{TFCpp}
+\end{frame}
+
+\note{
+\begin{itemize}
+\item Wieso kann das post-increment nicht mit return by reference funktionieren?
+\end{itemize}
+}
+
+\begin{frame}[fragile]{Referenzen II}
+\begin{block}{Verkettung}
+\begin{itemize}
+\item pre-increment erlaubt Verkettung:
+
+\begin{TPCpp}
+++(++i)
+\end{TPCpp}
+\item post-increment erlaubt keine Verkettung:
+
+\begin{TPCpp}
+++(i++)
+(++i)++
+(i++)++
+\end{TPCpp}
+\end{itemize}
+\end{block}
+\end{frame}
+
+\note{
+\begin{itemize}
+\item Das pre-increment erlaubt eine Verkettung,
+da es einen l-value zurückgibt, der wiederum als
+Funktionsargument aufgenommen werden kann.
+\item Beim post-increment funktioniert das nicht,
+da ein r-value nicht Funktionsargument der 
+Inkrementierungsfuntion sein kann. Diese verlangt
+nämlich einen veränderlichen l-value.
+\end{itemize}
+}
+
+\begin{frame}[fragile]{Referenzen II}
+\begin{block}{Verkettung}
+\begin{itemize}
+\item pre-increment erlaubt Verkettung:
+
+\begin{TPCpp}
+++(++i) //funktioniert
+\end{TPCpp}
+\item post-increment erlaubt keine Verkettung:
+
+\begin{TPCpp}
+++(i++) //funktioniert nicht
+(++i)++ //funktioniert
+(i++)++ //funktioniert nicht
+\end{TPCpp}
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Referenzen II}
+\begin{block}{Vorteile}
+\begin{itemize}
+\item Calling by reference verhindert unnötige Kopien.
+
+\begin{TPCpp}
+void read_ij(Matrix& A, unsigned int i, unsigned int j);
+\end{TPCpp}
+\item Manchmal ist es unmöglich zu kopieren.
+
+\begin{TPCpp}
+int a = 5;
+int b = a; //making a copy of an int
+std::ostream o = std::cout; 
+//copying std::cout impossible!
+std::ostream& o = std::cout; //this works!
+\end{TPCpp}
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Statische Arrays}
+\begin{TFCpp}
+int b[8] = {1,2,3,4};
+int c[4];
+int a[] = {7,5,0,3,8};
+std::cout << a[0];
+std::cout << a[4];
+std::cout << a[5];
+std::cout << a[-10];
+\end{TFCpp}
+\end{frame}
+
+\begin{frame}[fragile]{Statische Arrays}
+\begin{TFCpp}
+int b[8] = {1,2,3,4};  //[1 2 3 4 0 0 0 0]
+int c[4]; //[w x y z] 
+int a[] = {7,5,0,3,8}; //[7 5 0 3 8]
+std::cout << a[0]; // outputs 7
+std::cout << a[4]; // outputs 8
+std::cout << a[5]; // random garbage / segmentation fault
+std::cout << a[-10]; // random garbage / segmentation fault
+\end{TFCpp}
+\end{frame}
+
+\begin{frame}[fragile]{Statische Arrays}
+\begin{TFCpp}
+int array_length;
+cin>>array_length;
+
+int array[array_length];
+\end{TFCpp}
+\end{frame}
+
+\note{
+\begin{itemize}
+\item Die Laenge eines Arrays muss vor Laufzeit definiert sein!
+\item Der Code kompiliert zwar auf Codeboard,
+generell ist das Verwenden einer nicht-konstanten Arraylänge
+verboten und wird auf anderen Compilern Kompilierfehler auslösen.
+\end{itemize}
+}
+
+\begin{frame}[fragile]{Statische Arrays}
+\begin{TFCpp}
+const int array_length = 10;
+
+int array[array_length];
+\end{TFCpp}
+\end{frame}
+
+\begin{frame}[fragile]{Exercise 06\_1 $\sim$ 5'}
+\begin{TPCpp}
+int numbers[10];
+
+//read 10 numbers
+
+//output all 10 numbers to cout
+
+//make a copy of "numbers"
+\end{TPCpp}
+\end{frame}
+
+\begin{frame}[fragile]{Solution 06\_1 $\sim$ 5'}
+\begin{TPCpp}
+int numbers[10];
+
+//read 10 numbers
+for (int i = 0; i < 10; i++)
+std::cin >> numbers[i];
+
+//output all 10 numbers to cout
+for (int i = 0; i < 10; i++)
+std::cout << numbers[i] << " ";
+
+//make a copy of "numbers"
+int copy[10];
+for (int i=0; i<10; i++)
+	copy[i] = numbers[i];
+\end{TPCpp}
+\end{frame}
+
+\begin{frame}[fragile]{Vectors}
+\begin{TFCpp}
+#include <vector>
+
+int main(){
+	int n; 
+	cin>>n;
+	std::vector<int> numbers(n,0);
+
+	for (int i = 0; i<n; i++)
+		std::cin>>numbers[i];
+	
+	for (int i = 0; i<n; i++)
+		std::cout<<numbers[i]<<" ";
+		
+	std::vector<int> copy = numbers;
+
+}
+\end{TFCpp}
+\end{frame}
+
+\note{
+\begin{itemize}
+\item Vektoren koennen ihre Laenge bei Laufzeit zugewiesen bekommen.
+\item Der Zugriff funktionert gleicht wie beim Array.
+\item Der Kopiervorgang ist viel einfacher als beim Array, da der operator= ueberladen ist...
+\end{itemize}
+}
+
+\begin{frame}[fragile]{Vectors}
+\begin{TFCpp}
+cout<<numbers.size(); //Laenge des Vektors
+
+numbers.push_back(7); //Verlaengerung des Vektors
+
+cout<<numbers[11]; //garbage / segmentation fault
+
+cout<<numbers.at(11); //Prueft Index auf Validitaet
+
+
+\end{TFCpp}
+
+\easyurl{vector}{http://www.cplusplus.com/reference/vector/vector/}
+\end{frame}
+
+\begin{frame}[fragile]{Schriftzeichen}
+\begin{block}{char}
+\begin{itemize}
+\item 1 byte - 7 bits verfügbar (\easyurl{Spezialrolle 1. bit}{https://en.wikipedia.org/wiki/UTF-8})
+\item Speichert Symbole
+\end{itemize}
+\end{block}
+
+\includegraphics[width=\linewidth]{ASCII}
+
+\easyurl{ASCII code}{http://www.cplusplus.com/doc/ascii/}
+\end{frame}
+
+\begin{frame}[fragile]{Schriftzeichen}
+\begin{TPCpp}
+char letter 'a';
+int number = letter; // conversion
+//number = 97
+
+int number = 66;
+char letter = number; //implicite conversion
+//letter = 'B'
+\end{TPCpp}
+\end{frame}
+
+\note{
+\begin{itemize}
+\item Zeichen können in c++ mit Hochkommas geschrieben werden.
+\item Die Zuweisung einer char zu einer int und umgekehrt bewirkt eine automatische / implizite Typenkonversion. Für die Konversion wird der ASCII Code verwendet.
+\end{itemize}
+}
+
+\begin{frame}{Schriftzeichen}
+\begin{block}{Das Alphabet}
+\begin{align*}
+(65)&-&10\ 00001&=&'A'\\
+(66)&-&10\ 00010&=&'B'\\
+&&\vdots&&\\
+(97)&-&11\ 00001&=&'a'\\
+(98)&-&11\ 00010&=&'b'
+\end{align*}
+\end{block}
+\end{frame}
+
+\note{
+\begin{itemize}
+\item Die Zeichen des Alphabets sind im ASCII Code so positioniert, dass durch Weglassen der ersten 2 bits direkt die Position des Buchstabens im Alphabet errechnet werden kann.
+\end{itemize}
+}
+
+\end{document}
+
