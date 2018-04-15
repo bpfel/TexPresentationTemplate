@@ -13,6 +13,14 @@
 %\end{frame}
 %}
 
+%PDFpages
+\newcommand{\pdffile}[1]{
+{
+\setbeamercolor{background canvas}{bg=}
+\includepdf[pages=-]{#1}
+}
+}
+
 
 \NewEnviron{TFTimeSchedule}[1][]{
 \begin{frame}{Time Schedule#1}
