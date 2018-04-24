@@ -1,0 +1,226 @@
+%===========================================================================
+%generation of assignment and solution in one .tex file. make sure that write18 is activated(--enable-write18 for example as you call pdflatex.exe)
+%\gdef\conditionmacro{1}
+\ifx\conditionmacro\undefined 
+\immediate\write18{%
+	pdfLaTeX --jobname="presentation_handout"
+	\gdef\string\conditionmacro{1}\string\input\space\jobname
+}%
+\immediate\write18{%
+	pdfLaTeX --jobname="presentation_with_notes"
+	\gdef\string\conditionmacro{3}\string\input\space\jobname
+}%
+\gdef\conditionmacro{2}
+%\expandafter\stop
+\fi
+%---------------------------------------------------------------------------
+
+\ifnum\conditionmacro=1 \documentclass[handout,usenames,dvipsnames]{beamer}\fi
+\ifnum\conditionmacro=2 \documentclass[usenames,dvipsnames]{beamer} \fi
+\ifnum\conditionmacro=3 \documentclass[notes,handout,usenames,dvipsnames]{beamer}
+\usepackage{pgfpages}
+\setbeameroption{show notes on second screen=left} \fi
+
+\usetheme{Boadilla}
+
+\input{../HEADERFILES_FOR_LATEX/PACKAGES}
+\input{../HEADERFILES_FOR_LATEX/ENVIRONMENTS}
+\input{../Presentation/PRESENTATION_ENVIRONMENTS}
+\input{../HEADERFILES_FOR_LATEX/COMMANDS}
+\graphicspath{{./Pictures/}}
+
+\title{Exercise Week 07}
+\author{GianAndrea Müller\\ \url{mailto:muellegi@student.ethz}}
+\date{\today}
+
+\begin{document}
+%Make title page from above supplied information on title, author, etc.
+\maketitle
+
+\begin{TFTimeSchedule} 
+\item 15' Bubble sort \& Maximum sort
+\item 15' 2D Arrays
+\item 5' Matrix as Array
+\item 15' Strings
+\item 15' Pointers
+\item 5' Arrays und Pointers
+\end{TFTimeSchedule}
+
+\begin{TFLearningObjectives}
+\item Verständnis des Konzepts von Pointern
+\item Kenntnis der Funktionalität von Strings
+\end{TFLearningObjectives}
+
+\pdffilenohandout{Bubble sort}{slides07_bubble_sort.pdf}
+\pdffilenohandout{Max sort}{slides08_max_sort.pdf}
+
+
+\note{
+\begin{itemize}
+\item Idea: Transport the maximum of the current sub-array
+to the left and repeat.
+\end{itemize}
+}
+
+
+
+\note{
+\begin{itemize}
+\item Idea: Improve on bubble sort by not swapping every time
+but searching for the max and swapping when having found it.
+\end{itemize}
+}
+
+\begin{frame}[fragile]{2D Arrays}
+\begin{TFCpp}
+int array[3][4];
+
+for(int i = 0; i<3; i++){
+	for(int j = 0; j<4){
+		std::cin >> array[i][j]
+	}
+}
+\end{TFCpp}
+\end{frame}
+
+\begin{frame}[fragile]{2D Vectors}
+\begin{TFCpp}
+int m = 4;
+int n = 3;
+std::vector< std::vector<int> > peter (m, std::vector<int>(n));
+
+for (unsigned int i = 0; i<m; i++){
+	for(unsigned int j = 0; j<n; j++){
+		std::cin>>peter[i][j];
+	}
+}
+
+std::vector< std::vector<int> > copy = peter;
+\end{TFCpp}
+\end{frame}
+
+\note{\begin{itemize}
+\item Bei der Initialisierung eines 2D Vektors wird ein
+Vektor von Vektoren angelegt.
+\end{itemize}}
+
+\pdffilenohandout{Matrix as Array}{slides08_matrix_as_array.pdf}
+
+\begin{frame}[fragile]{Strings}
+\begin{TFCpp}
+#include <iostream>
+#include <string>
+
+int main(){
+	std::string text;
+	std::cin>>text;
+	
+	text+= " world!";
+	
+	std::string text2 = text;
+	
+	std::cout<<text2<<"\n";
+	
+	return 0;
+}
+\end{TFCpp}
+\end{frame}
+
+\note{
+\begin{itemize}
+\item Die Bibliothek string erlaubt das Speichern von
+Buchstaben in einer Vektor-aehnlichen Struktur.
+\item Sie hat wie der Vektor Zugriffsmethoden wie .at()
+und .push\_back().
+\item Zusaetzlich kann ueber den +=-Operator ein string
+einfach angehaengt werden.
+\item Weiter koennen cin und cout direkt verwendet werden.
+Fuer das Einlesen und Ausgeben von mehreren Buchstaben
+wird keine Schleife benoetigt.
+\end{itemize}}
+
+\begin{frame}[fragile]{String}
+\begin{TFCpp}
+std::string str("The quick brown fox jumps over the lazy dog.");
+
+std::cout<< str.find("fox") << "\n";
+std::cout<< str.find("fox", 30) << "\n";
+
+str.replace(10,5,"red");
+std::cout<<str<<"\n";
+
+str.erase(10,4);
+std::cout<<str<<"\n";
+\end{TFCpp}
+\end{frame}
+
+\note{\begin{itemize}
+\item Die .find() Funktion erlaubt es einen Substring
+innerhalb des Strings zu lokalisieren. Rueckgabewert ist dabei
+die Position des ersten Buchstabens des Substrings.
+\item Weiter kann als zweites Argument die Startposition
+der Suche uebergeben werden. Das ist nuetzlich wenn der
+gesuchte Substring mehrmals vorkommen kann.
+\item Falls der Substring nicht gefunden wird, wird die Konstante std::string:npos zurueckgegeben (eine grosse positive Zahl, Wert compilerabhaengig).
+\end{itemize}}
+
+\begin{frame}[fragile]{Pointers}
+\begin{TFCpp}
+int a = 6;
+int & b = a;
+
+b++; //a==7
+\end{TFCpp}
+\end{frame}
+
+\begin{frame}[fragile]{Pointers}
+\begin{TPCpp}
+int a = 6;
+int * b = &a;
+
+(*b)++; //a==7
+
+\end{TPCpp}
+\begin{block}{Operatoren}
+\begin{itemize}
+\item Dereferenzierung: \verb+*+
+\item Referenzierung: \verb+&+
+\item Neuer pointer: \verb+<type> * name+
+\item Inkrementierung: \verb.++.
+\end{itemize}
+\end{block}
+\end{frame}
+
+\note{\begin{itemize}
+\item Der Dereferenzierungsoperator wird gebraucht um den
+ Wert auf den ein Pointer zeigt zu erhalten. Er wird immer
+  vor den Pointer gesetzt.
+\item Der Referenzierungsoperatur wird gebraucht um die
+ Adresse einer Variable zu erhalten.
+\item Um einen neuen Pointer zu erzeugen wird in der
+ Variablendeklaration nach dem Typ der Variable ein
+ Stern angehaengt.
+\item Der inkrementierungsoperator verschiebt den
+Pointer um die Laenge des Datentyps auf den er zeigt.
+\end{itemize}}
+
+\pdffilenohandout{Einführung zu Pointern}{slides08_pointer_intro.pdf}
+
+\begin{frame}[fragile]{Pointers}
+\begin{TFCpp}
+int arr[] = {7,1,0,2,5};
+
+int* pointer = arr;
+
+std::cout<< *point << "\n";
+std::cout<< *(point + 3) << "\n";
+std::cout<< point[3] << "\n";
+
+int* second_pointer = &arr[0];
+\end{TFCpp}
+\end{frame}
+
+\pdffilenohandout{Arrays und Pointer}{slides08_pointers_on_arrays.pdf}
+
+\end{document}
+
