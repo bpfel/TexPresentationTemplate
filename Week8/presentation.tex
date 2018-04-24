@@ -1,0 +1,237 @@
+%===========================================================================
+%generation of assignment and solution in one .tex file. make sure that write18 is activated(--enable-write18 for example as you call pdflatex.exe)
+\gdef\conditionmacro{3}
+\ifx\conditionmacro\undefined 
+\immediate\write18{%
+	pdfLaTeX --jobname="presentation_handout"
+	\gdef\string\conditionmacro{1}\string\input\space\jobname
+}%
+\immediate\write18{%
+	pdfLaTeX --jobname="presentation_with_notes"
+	\gdef\string\conditionmacro{3}\string\input\space\jobname
+}%
+\gdef\conditionmacro{2}
+%\expandafter\stop
+\fi
+%---------------------------------------------------------------------------
+
+\ifnum\conditionmacro=1 \documentclass[handout,usenames,dvipsnames]{beamer}\fi
+\ifnum\conditionmacro=2 \documentclass[usenames,dvipsnames]{beamer} \fi
+\ifnum\conditionmacro=3 \documentclass[notes,handout,usenames,dvipsnames]{beamer}
+\usepackage{pgfpages}
+\setbeameroption{show notes on second screen=left} \fi
+
+\usetheme{Boadilla}
+
+\input{../HEADERFILES_FOR_LATEX/PACKAGES}
+\input{../HEADERFILES_FOR_LATEX/ENVIRONMENTS}
+\input{../Presentation/PRESENTATION_ENVIRONMENTS}
+\input{../HEADERFILES_FOR_LATEX/COMMANDS}
+\graphicspath{{./Pictures/}}
+
+\title{Exercise Week 08}
+\author{GianAndrea Müller\\ \url{mailto:muellegi@student.ethz}}
+\date{\today}
+
+\begin{document}
+%Make title page from above supplied information on title, author, etc.
+\maketitle
+
+\begin{TFTimeSchedule}
+\item 20' Self-assessment test
+\item 20' Korrektur
+\item 20' Repetition Pointer und Übung
+\item 10' Iterators
+\item 5' Using
+\end{TFTimeSchedule}
+
+\begin{TFLearningObjectives}
+\item Verständnis der Funktionalität von Pointern
+\item Kenntnis von Iteratoren
+\end{TFLearningObjectives}
+
+\begin{frame}[fragile]{Repetition Pointers}
+\begin{TFCpp}
+int a = 5;
+int * aptr = &a;
+*aptr = *aptr + 1; // a = 6;
+
+int liste[10];
+int * index = &liste[0]; // = liste;
+
+int i = 0;
+while ( index < liste + 10 ){
+	cout<<*index<<*(liste+i)<<liste[i];
+	index++; i++;
+}
+\end{TFCpp}
+\end{frame}
+
+\note{\begin{itemize}
+\item Pointer haben denselben Typ wie die Variable auf die sie zeigen.
+\item Pointer werden definiert mit *.
+\item Pointer können umgesetzt werden.
+\item Der Adressoperator \& liefert die Adresse einer Variablen.
+\item Der Dereferenzierungsoperator liefer die Variable auf die ein 
+Pointer zeigt.
+\item Arraynamen sind auch Pointer, die auf das erste Element
+des Arrays zeigen.
+\item Mit Pointern kann man rechnen. Inkrement und Dekrement sind
+dabei auf den Typ des Pointers angepasst.
+\end{itemize}}
+
+\begin{frame}[fragile]{Zusammenfassung Pointer}
+\begin{block}{Operatoren}
+\begin{itemize}
+\item Neuer Pointer: \verb+<type> * name;+
+\item Dereferenzierung: \verb+*(some_pointer)+
+\item Referenzierung: \verb+&some_variable+
+\item Arithmetik: \verb.++some_pointer.
+\end{itemize}
+\end{block}
+\begin{block}{Nutzen}
+\begin{itemize}
+\item Dynamische Speicherverwaltung (später)
+\item Zeiger statt Index (effizienter)
+\item Call/Return by Reference
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Unterschied: Pointer und Referenzen}
+\begin{itemize}
+\item Ein Pointer kann neu zugeordnet werden.
+\item Ein Pointer kann auf \verb+NULL+ zeigen.
+\item Die Adresse eines Pointers kann verwendet werden.
+\item Es gibt keine Referenzarithmetik.
+\end{itemize}
+\begin{block}{Merksatz}
+\textbf{Eine Referenz ist ein konstanter Pointer, der nicht dereferenziert werden muss.}
+\end{block}
+\end{frame}
+
+\note{\begin{itemize}
+\item Also können wir Pointer auf Pointer machen, Funktionsprinzip des 2D arrays.
+
+\end{itemize}}
+
+\begin{frame}[fragile]{Konstante Pointer}
+\begin{TFCpp}
+int i = 0;
+int * iptr = &i;
+const int * icptr = &i;
+int const * ic2ptr = &i;
+int * const iptrc = &i;
+const int * const iptrc2 = &i;
+\end{TFCpp}
+\end{frame}
+
+\begin{frame}[fragile]{Konstante Pointer}
+\textbf{Lies von rechts nach links! Lies $*$ als 'Pointer auf'.}
+\begin{block}{Lesen von Pointern}
+\begin{itemize}
+\item \texttt{\textcolor{blue}{int} \textcolor{violet}{*} \textcolor{orange}{iptr} = \&i;}
+
+\textcolor{orange}{iptr:} \textcolor{violet}{Pointer auf} \textcolor{blue}{int}.
+\item \texttt{\textcolor{blue}{const int}\textcolor{violet}{ *} \textcolor{orange}{icptr} = \&i;}
+
+\textcolor{orange}{icptr:} \textcolor{violet}{Pointer auf} \textcolor{blue}{const int}.
+\item \texttt{\textcolor{blue}{int const} \textcolor{violet}{*} \textcolor{orange}{ic2ptr} = \&i;}
+
+\textcolor{orange}{icptr2}: \textcolor{violet}{Pointer auf} \textcolor{blue}{const int}.
+\item \texttt{\textcolor{blue}{int} \textcolor{violet}{*} \textcolor{red}{const} \textcolor{orange}{iptrc} = \&i;}
+
+\textcolor{orange}{iptrc:} \textcolor{red}{const} \textcolor{violet}{Pointer auf} \textcolor{blue}{int}.
+\item \texttt{\textcolor{blue}{const int} \textcolor{violet}{*} \textcolor{red}{const} \textcolor{orange}{icptrc} = \&i;}
+
+\textcolor{orange}{icptrc:} \textcolor{red}{const} \textcolor{violet}{Pointer auf} \textcolor{blue}{const int}.
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Exercise 8\_1 5'}
+Write a function that outputs part of an int array. You are not allowed to pass the number of elements to be printed.
+
+\begin{TPCpp}
+void print_part_of_array(arg1, arg2, arg3){
+	//print elements in defined range
+}
+\end{TPCpp}
+\end{frame}
+
+\begin{frame}[fragile]{Solution 8\_1}
+\begin{TFCpp}
+//PRE: beginning and end have to enclose a valid part of an array
+//POST: The part of the array is printed
+void print_part_of_array(int * beginning, int * end){
+	for(int * current = beginning; current <= end; current++){
+		cout<<*current<<" ";
+	}
+	cout<<endl;
+}
+\end{TFCpp}
+\end{frame}
+
+\begin{frame}[fragile]{Iterators}
+\begin{TPCpp}
+#include <vector>
+
+vector<int> vec = {8,3,1,4,6,9}; 
+//C++ 11 syntax! Choose C++14 on codeboard.io!
+
+vector<int>::iterator itb = vec.begin();
+vector<int>::iterator ite = vec.end();
+
+cout<<*itb<<" "<<*ite<<endl;
+\end{TPCpp}
+
+\easyurl{Iterators}{http://www.cplusplus.com/reference/iterator/}
+\end{frame}
+
+\note{\begin{itemize}
+\item Iteratoren sind Mitgliedsvariablen von vector
+und funktionieren für Vektoren ähnlich wie Pointer
+für Arrays.
+\item Der Iterator zeigt auf eine bestimmte Stelle
+des Vektors.
+\item Der Iterator kann inkrementiert und dekrementiert
+werden.
+\end{itemize}}
+
+\begin{frame}[fragile]{Iterators}
+\begin{TFCpp}
+#include <vector>
+
+// int a[] = {8,3,1,4,6,9};
+// for (int *p = a; p!= a + 6; ++p)
+//   cout<<*p;
+
+vector<int> vec = {8,3,1,4,6,9}; 
+//C++ 11 syntax! Choose C++14 on codeboard.io!
+
+for(vector<int>::iterator it=vec.begin(); it<vec.end(); ++it)
+	cout<<*it;
+\end{TFCpp}
+\end{frame}
+
+\begin{frame}[fragile]{Using}
+\begin{TFCpp}
+using intvec = std::vector<int>;
+using intvecit = std::vector<int>::iterator;
+
+intvec vec = {1,2,3,4,5,6,7};
+
+for (intvecit it = vec.begin(); it < vec.end(); ++it)
+	std::cout<< *it;
+\end{TFCpp}
+\end{frame}
+
+\note{\begin{itemize}
+\item Der code wird einfacher zu lesen
+\item Wenn Variablentypen später ausgetauscht werden müssen, kann
+das an einer Stelle angepasst werden, statt die entsprechenden
+Variablen im ganzen Code zu suchen.
+\end{itemize}}
+
+\end{document}
+
