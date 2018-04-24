@@ -21,6 +21,20 @@
 }
 }
 
+\newcommand{\pdffilenohandout}[2]{
+\ifnum\conditionmacro=1 
+\begin{frame}{#1}
+\easyurl{#1 slides}{#2}
+\end{frame}
+\fi
+\ifnum\conditionmacro=3 
+\begin{frame}{#1}
+\easyurl{#1 slides}{#2}
+\end{frame}
+\fi
+\ifnum\conditionmacro=2 \pdffile{#2}\fi
+}
+
 
 \NewEnviron{TFTimeSchedule}[1][]{
 \begin{frame}{Time Schedule#1}
