@@ -1,0 +1,355 @@
+%===========================================================================
+%generation of assignment and solution in one .tex file. make sure that write18 is activated(--enable-write18 for example as you call pdflatex.exe)
+%\gdef\conditionmacro{2}
+\ifx\conditionmacro\undefined 
+\immediate\write18{%
+	pdfLaTeX --jobname="presentation_handout"
+	\gdef\string\conditionmacro{1}\string\input\space\jobname
+}%
+\immediate\write18{%
+	pdfLaTeX --jobname="presentation_with_notes"
+	\gdef\string\conditionmacro{3}\string\input\space\jobname
+}%
+\gdef\conditionmacro{2}
+%\expandafter\stop
+\fi
+%---------------------------------------------------------------------------
+
+\ifnum\conditionmacro=1 \documentclass[handout,usenames,dvipsnames]{beamer}\fi
+\ifnum\conditionmacro=2 \documentclass[usenames,dvipsnames]{beamer} \fi
+\ifnum\conditionmacro=3 \documentclass[notes,handout,usenames,dvipsnames]{beamer}
+\usepackage{pgfpages}
+\setbeameroption{show notes on second screen=left} \fi
+
+\usetheme{Boadilla}
+
+\input{../HEADERFILES_FOR_LATEX/PACKAGES}
+\input{../HEADERFILES_FOR_LATEX/ENVIRONMENTS}
+\input{../Presentation/PRESENTATION_ENVIRONMENTS}
+\input{../HEADERFILES_FOR_LATEX/COMMANDS}
+\graphicspath{{./Pictures/}}
+
+\title{Exercise Week 09}
+\author{GianAndrea Müller\\ \url{mailto:muellegi@student.ethz}}
+\date{\today}
+
+\begin{document}
+%Make title page from above supplied information on title, author, etc.
+\maketitle
+
+\begin{TFTimeSchedule}
+\item 10' Rekursion - Konzept mit Beispiel
+\item 3' Rekursion vs Iteration
+\item 5' Rekursion - Optimierung
+\item 10' Rekursionsbäume
+\item 20' Beispielaufgaben zu Rekursion
+\item 15' Pause
+\item 45' Q\&A
+\end{TFTimeSchedule}
+
+\begin{TFLearningObjectives}
+\item Verständnis: Rekursion
+\end{TFLearningObjectives}
+
+\begin{frame}[fragile]{Rekursion - Konzept}
+\begin{TFCpp}
+int function(arg1, arg2){
+	//Call function recursively
+	function(arg1, arg2);	
+}
+\end{TFCpp}
+\end{frame}
+
+\note{\begin{itemize}
+\item Was waere wenn sich eine Funktion selbst aufruft?
+\item Stack overflow.
+\item Wir muessen ein Ende definieren!
+\end{itemize}}
+
+\begin{frame}[fragile]{Rekursion - Konzept}
+\begin{TFCpp}
+int function(arg1, arg2){
+	// Termination condition	
+	if(terminate){
+		return result;
+	}
+	// do stuff
+	
+	//Call function recursively
+	function(arg1, arg2);	
+}
+\end{TFCpp}
+\end{frame}
+
+\note{\begin{itemize}
+\item Loesung: Einfuehren einer Abschlussbedingung.
+\item Wichtig: Die Funktion muss so formuliert sein
+das die Abschlussbedingung zwingend erreicht wird.
+\item Es ist möglich das der stack overflow
+eintritt wird bevor die Abschlussbedingung eintritt.
+\end{itemize}}
+
+\begin{frame}[fragile]{Rekursion - Beispiel I}
+\begin{TFCpp}
+double power(double x, int n){
+	if (n == 1){
+		return x;
+	}
+	
+	return x*power(x, n-1);	
+}
+\end{TFCpp}
+\end{frame}
+
+\note{\begin{itemize}
+\item Eine rekursive Implementation der Hochrechnung.
+\item Die Abbruchbedingung tritt ein sobald der letze
+Faktor der Reihe erreicht wurde.
+(Man stelle sich die Hochrechnung als Reihe von 
+Multiplikationen vor)
+\item Gegenuebergestellt mit der iterativen Implementation
+sieht das dann so aus:
+\end{itemize}}
+
+\begin{frame}[fragile]{Rekursion - Beispiel I}
+\begin{TFCpp}
+double power(double x, int n){
+	if (n == 1){
+		return x;
+	}
+	
+	return x*power(x, n-1);	
+}
+
+double itpower(double x, int n){
+	double result = 1;	
+	for(int i = 0; i<n; i++){
+		result *=x;
+	}
+	return result;
+}
+\end{TFCpp}
+\end{frame}
+
+\begin{frame}{Rekursion vs Iteration}
+
+\begin{block}{Vorteile und Nachteile der Rekursion}
+\begin{itemize}
+\item Vorteile:
+\begin{itemize}
+\item Komplexe Probleme können relativ einfach gelöst werden.
+\item Der Code ist übersichtlicher.
+\end{itemize}
+\item Nachteile:
+\begin{itemize}
+\item Möglicher Stack Overflow!
+\item Langsamer
+\item Debugging ist schwieriger.
+\end{itemize}
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Rekursion - Beispiel I - Optimierung}
+\begin{align*}
+x^2 &= x\cdot x\\
+x^4 &= x^2\cdot x^2\\
+x^8 &= x^4\cdot x^4\\
+x^{16} &= x^8 \cdot x^8\\
+x^{20} &= x^{16}\cdot x^4
+\end{align*}
+\end{frame}
+
+\note{\begin{itemize}
+\item Die Potenz 20 kann mit nur 5 Multiplikationen gemacht
+werden. Das verlangt nach einer Optimierung unseres
+Algorithmus'.
+\end{itemize}}
+
+\begin{frame}[fragile]{Rekursion - Beispiel I - Optimierung}
+\begin{TFCpp}
+double power (double x, int n){
+	if (n == 1){
+		return x;
+	}
+
+double temp = power(x, n/2);
+return temp*temp;
+}
+\end{TFCpp}
+\end{frame}
+
+\note{\begin{itemize}
+\item Das funktioniert aber nur für $n$ die Potenzen
+von 2 sind.
+\end{itemize}}
+
+\begin{frame}[fragile]{Rekursion - Beispiel I - Optimierung}
+\begin{TFCpp}
+double power (double x, int n){
+	if (n == 1){
+		return x;
+	}
+	else if (n%2 == 0) {
+		double temp = power(x,n/2);
+		return temp*temp;
+	}
+	else return x*power(x,n-1);
+}
+\end{TFCpp}
+\end{frame}
+
+\begin{frame}[fragile]{Rekursionsbäume}
+\begin{TFCpp}
+//POST: return value is the n-th
+//Fibonacci number F(n)
+unsigned int fib(const unsigned int n){
+	if (n == 0) return 0;
+	if (n == 1) return 1;
+	return fib(n-1) + fib(n-2); //n>1
+}
+\end{TFCpp}
+\end{frame}
+
+\begin{frame}{Rekursionsbäume}
+\begin{center}
+\begin{tikzpicture}[level distance=10mm]
+	\tikzstyle{every node}=[fill=white,draw=black,rectangle,inner sep=4pt]
+	\tikzstyle{every child}=[fill=white,draw=black,rectangle,inner sep=4pt]
+	\tikzstyle{level 1}=[set style ={{every child}+=[sibling distance=40mm]}]
+	\tikzstyle{level 2}=[set style ={{every child}+=[sibling distance=20mm]}]
+	\node{f(4)}
+		child {node[visible on=<2->]{f(3)}
+				child{node[visible on=<3->] {f(2)}
+					child{node[fill=blue!20,visible on=<4->]{f(1)}}
+					child{node[fill=blue!20,visible on=<4->]{f(0)}}
+				}
+				child{node[fill=blue!20,visible on=<3->] {f(1)}}
+			}
+		child{node[visible on=<5->] {f(2)}
+			child{node[fill=blue!20,visible on=<6->]{f(1)}} 
+			child{node [fill=blue!20,visible on=<6->]{f(0)}}
+			};		
+\end{tikzpicture}
+\end{center}
+\end{frame}
+
+\note{\begin{itemize}
+\item fib(0) und fib(1) werden insgesamt 5 mal aufgerufen!
+\item Die Anzahl blauer Kästchen entspricht der
+Fibonacci-Zahl, somit ist klar das die Anzahl Funktions-
+aufrufe strikt grösser als die resultierende Zahl ist.
+\item Für grössere n waechst die Fibonaccireihe exponentiell.
+\item Somit wird auch der Rechenaufwand extrem schnell höher!
+\end{itemize}}
+
+\begin{frame}[fragile]{Fibonacci Iterativ}
+\begin{TFCpp}
+// POST: return value is the n-th Fibonacci number F(n)
+unsigned int fib2 (const unsigned int n) {
+if (n == 0) return 0;
+if (n <= 2) return 1;
+unsigned int a = 1; // F_1
+unsigned int b = 1; // F_2
+for (unsigned int i = 3; i <= n; ++i) {
+unsigned int a_prev = a; // F_i-2
+a = b; // F_i-1
+b += a_prev; // F_i-1 += F_i-2 -> F_i
+}
+return b;
+}
+\end{TFCpp}
+\end{frame}
+
+\note{\begin{itemize}
+\item Die iterative Variante ist viel schneller.
+\item Trotzdem ist verzweigte Rekursion nicht generell zu
+vermeiden sondern kann sehr nützlich sein.
+\end{itemize}}
+
+\begin{frame}[fragile]{Rekursion - Aufgabe I $\sim$ 5'}
+\begin{block}{Aufgabe}
+\begin{itemize}
+\item Schreiben Sie die folgende Funktion in iterativer Form.
+\end{itemize}
+\end{block}
+\begin{TPCpp}
+unsigned int f (const unsigned int n)
+{
+	if (n<= 2) return 1;
+	return f(n-1) + 2*f(n-3);
+}
+\end{TPCpp}
+\end{frame}
+
+\begin{frame}[fragile]{Rekursion - Lösung I}
+\begin{TFCpp}
+unsigned int f_it (const unsigned int n) {
+	if(n<=2) return 1;
+	unsigned int a = 1; // f(0)
+	unsigned int b = 1; // f(1)
+	unsigned int c = 1; // f(2)
+	for (int i = 3; i<n; ++i){
+		int a_prev = a    // f(i-3)
+		a = b;            // f(i-2)
+		b = c;            // f(i-1)
+		c = b+ 2*a_prev;  // f(i)
+	}
+	return c + 2*a;
+}
+\end{TFCpp}
+\end{frame}
+
+\begin{frame}[fragile]{Rekursion - Aufgabe II $\sim$ 5'}
+\begin{block}{Aufgabe}
+\begin{itemize}
+\item Schreiben Sie die folgende Funktion in iterativer Form.
+\end{itemize}
+\end{block}
+\begin{TPCpp}
+unsigned int f (const unsigned int n)
+{
+	if (n==0) return 1;
+	return f(n-1) + 2*f(n/2);
+}
+\end{TPCpp}
+\end{frame}
+
+\begin{frame}[fragile]{Rekursion - Lösung II}
+\begin{TFCpp}
+unsigned int f_it (const unsigned int n)
+{
+	if (n==0) return 1;
+	
+	std::vector<unsigned int> f_val(n+1,0);
+	f_val[0] = 1;
+	for (int i = 1; i<=n; ++i)
+		f_val[i] = f_val[i-1] + 2*f_val[i/2];
+	
+	return f_val[n];
+}
+\end{TFCpp}
+\end{frame}
+
+\begin{frame}[fragile]{Beispiel: Self assessment}
+\begin{TFCpp}
+int f(const int* begin, const int* end){
+	int val1 = *begin;
+	if(++begin != end){
+		const int val2 = f(begin,end);
+		if(val2>val1) { val1 = val2;}
+	}
+	return val1}
+
+int g(const int *begin, const int *end){
+	int val = *begin;
+	for (const int * it=++begin; it != end; ++it){
+		if (*it > val){ val = *it}
+	}
+	return val
+}
+\end{TFCpp}
+\end{frame}
+
+\end{document}
+
