@@ -1,0 +1,1 @@
+Da die aktuelle Aufgabe nicht Brüche sondern komplexe Zahlen behandelt veröffentliche ich mein Beispiel guten Gewissens ;) Hoffe es hilft!

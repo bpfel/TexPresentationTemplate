@@ -1,0 +1,422 @@
+%===========================================================================
+%generation of assignment and solution in one .tex file. make sure that write18 is activated(--enable-write18 for example as you call pdflatex.exe)
+%\gdef\conditionmacro{1}
+\ifx\conditionmacro\undefined 
+\immediate\write18{%
+	pdfLaTeX --jobname="presentation_handout"
+	\gdef\string\conditionmacro{1}\string\input\space\jobname
+}%
+\immediate\write18{%
+	pdfLaTeX --jobname="presentation_with_notes"
+	\gdef\string\conditionmacro{3}\string\input\space\jobname
+}%
+\gdef\conditionmacro{2}
+%\expandafter\stop
+\fi
+%---------------------------------------------------------------------------
+
+\ifnum\conditionmacro=1 \documentclass[handout,usenames,dvipsnames]{beamer}\fi
+\ifnum\conditionmacro=2 \documentclass[usenames,dvipsnames]{beamer} \fi
+\ifnum\conditionmacro=3 \documentclass[notes,handout,usenames,dvipsnames]{beamer}
+\usepackage{pgfpages}
+\setbeameroption{show notes on second screen=left} \fi
+
+\usetheme{Boadilla}
+
+\input{../HEADERFILES_FOR_LATEX/PACKAGES}
+\input{../HEADERFILES_FOR_LATEX/ENVIRONMENTS}
+\input{../Presentation/PRESENTATION_ENVIRONMENTS}
+\input{../HEADERFILES_FOR_LATEX/COMMANDS}
+\graphicspath{{./Pictures/}}
+
+\title{Exercise Week 10}
+\author{GianAndrea Müller\\ \url{mailto:muellegi@student.ethz}}
+\date{\today}
+
+\begin{document}
+%Make title page from above supplied information on title, author, etc.
+\maketitle
+
+\begin{TFTimeSchedule}
+\item 20' Backus-Naur-Form mit Übung
+\item 10' Datenstrukturen
+\item 5' Funktionsüberladung
+\item 10' Operatorüberladung
+\item 5' Konstante Referenzen
+\end{TFTimeSchedule}
+
+\begin{TFLearningObjectives}
+\item Verständnis der EBNF
+\item Kenntnis von Datenstrukturen und Funktionsüberladungen
+\end{TFLearningObjectives}
+
+\begin{frame}{Backus-Naur-Form}
+
+\begin{block}{BNF}
+Die BNF ist eine formale Metasprache, die benutzt wird, um kontextfreie Grammatiken darzustellen.\\
+\end{block}
+
+\begin{block}{Metasprache}
+Eine Metasprache ist eine ``Sprache über Sprache''.
+\end{block}
+
+\begin{block}{Kontextfreie Grammatik}
+Eine kontextfreie Grammatik besteht aus Regeln die unabhängig vom Kontext angewandt werden können.
+\end{block}
+
+\easyurl{EBNF}{https://de.wikipedia.org/wiki/Erweiterte_Backus-Naur-Form}$\quad$\easyurl{Metasprache}{https://de.wikipedia.org/wiki/Metasprache}$\quad$\easyurl{Kontextfreie Grammatik}{https://de.wikipedia.org/wiki/Kontextfreie_Grammatik}
+\end{frame}
+
+\begin{frame}[fragile]{Backus-Naur-Form}
+\begin{block}{Kurz und simpel}
+\textbf{Die Backus-Naur-Form ist eine Sprache die mit einfacher Syntax beschreibt, welche Sätze mit den Wörtern einer Sprache gebildet werden dürfen.}
+\end{block}
+\begin{block}{Aufbau}
+\begin{itemize}
+\item Alphabet = Terminalsymbole
+\item Satzbau = Produktionsregeln = Nichtterminalsymbol
+\end{itemize}
+\end{block}
+
+\begin{TPPython}
+ZifferAusserNull = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+Ziffer = "0" | ZifferAusserNull ;
+\end{TPPython}
+\end{frame}
+
+\begin{frame}[fragile]{Erweiterte Backus-Naur-Form: Beispiel}
+\begin{TFPython}
+ZifAussNull = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+Zif = "0" | ZifAussNull ;
+
+Zwoelf = "1", "2" ;
+Dreihundertzwoelf = "3", Zwoelf ;
+
+NatZahl = ZifAussNull, { Zif } ;
+GanzeZahl = "0" | [ "-" ], NatZahl ;
+\end{TFPython}
+\end{frame}
+
+\begin{frame}[fragile]{BNF: Aufgabe 10\_1}
+
+\begin{TPPython}
+seq = term | term "_" seq
+term = "A" | "A" lowerterm | lowerterm
+lowerterm = "a" | "a" lowerterm
+\end{TPPython}
+
+\begin{block}{Welcher Satz ist korrekt?}
+\begin{tabular}{|p{0.4\linewidth}|l|p{0.4\linewidth}|l|}
+\hline
+A&$\square$&aaA&$\square$\\\hline
+a&$\square$&A\_A&$\square$\\\hline
+\_ &$\square$&Aa\_Aa&$\square$\\\hline
+Aaaa&$\square$&&\\\hline
+\end{tabular}
+\end{block}
+
+\begin{block}{Weitere Fragen}
+Wie viele terminale und nichtterminale Symbole sind in dieser Form enthalten?
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]{BNF: Lösung 10\_1}
+
+\begin{TPPython}
+seq = term | term "_" seq
+term = "A" | "A" lowerterm | lowerterm
+lowerterm = "a" | "a" lowerterm
+\end{TPPython}
+
+\begin{block}{Welcher Satz ist korrekt?}
+\begin{tabular}{|p{0.4\linewidth}|l|p{0.4\linewidth}|l|}
+\hline
+A&\onslide<1->{\done}&aaA&\onslide<5->{\wontfix}\\\hline
+a&\onslide<2->{\done}&A\_A&\onslide<6->{\done}\\\hline
+\_&\onslide<3->{\wontfix}&Aa\_Aa&\onslide<7->{\done}\\\hline
+Aaaa&\onslide<4->{\done}&&\\\hline
+\end{tabular}
+\end{block}
+
+\begin{block}{Weitere Fragen}
+Es sind 3 terminale Symbole (''a'', ''A'', ''\_'') und drei nichtterminale Symbole (''seq'', ''term'', ''lowerterm'') enthalten
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Vorteile der EBNF}
+\begin{TPPython}
+seq = term | term "_" seq
+term = "A" | "A" lowerterm | lowerterm
+lowerterm = "a" | "a" lowerterm
+
+
+seq = term | term "_" seq
+term = "A" { "a" } | "a" { "a" }
+
+seq = term [ "_" seq ]
+term = "A" { "a" } | "a" { "a" }
+\end{TPPython}
+\end{frame}
+
+\note{\begin{itemize}
+\item Die erweiterte BNF fuehrt zusaetzlich 
+geschweifte Klammern ein. Diese bedeuten eine
+beliebige Anzahl Wiederholungen des enthaltenen
+Elements.
+\item Weiterhin werden eckige Klammer eingefuehrt.
+Diese bedeuten, dass der Inhalt 0 oder 1 mal
+eingefügt werden kann. Somit ist das eine Alternative.
+\end{itemize}}
+
+\begin{frame}[fragile]{struct}
+\begin{TFCpp}
+struct rational{
+	int n;
+	int d;
+};
+
+int main (){
+	rational r;
+	r.n = 1;
+	r.d = 2;
+	
+	return 0;
+}
+\end{TFCpp}
+\end{frame}
+
+\begin{frame}[fragile]{struct - Direkte Instantiierung}
+\begin{TFCpp}
+struct rational{
+	int n;
+	int d;
+}r,s;
+
+int main (){
+	r.n = 1;
+	r.d = 2;
+	
+	return 0;
+}
+\end{TFCpp}
+\end{frame}
+
+\begin{frame}[fragile]{struct - Als Funktionsargument}
+\begin{TFCpp}
+//POST: deliver solution for quadratic equation and return number of solutions
+int quad_solve(double a, double b, double c, double & x1, double & x2);
+
+\end{TFCpp}
+\end{frame}
+
+\begin{frame}[fragile]{struct - Als Funktionsargument}
+\begin{TFCpp}
+struct solution{
+	double x1;
+	double x2;
+};
+
+//POST: return solution as struct
+solution quad_solve(double a, double b, double c);
+
+\end{TFCpp}
+\end{frame}
+
+\begin{frame}[fragile]{Funktionsüberladung}
+\begin{TFCpp}
+void print_variable(int a){
+	cout<<"This is an int."<<endl;
+}
+
+void print_variable(double a){
+	cout<<"This is a double."<<endl;
+}
+
+int print_variable(int a, int b){
+	cout<<"Two ints."<<endl;
+	return 2;
+}
+\end{TFCpp}
+
+\easyurl{Für Enthusiasten}{https://codeboard.io/projects/81124}
+\end{frame}
+
+\note{\begin{itemize}
+\item Funktionsueberladung funktioniert mit Unterscheidung
+durch Anzahl Argumente und durch Typ der Argumente.
+\item Funktionsueberladung funktioniert weder mit Unterscheidung
+durch Rueckgabetyp noch durch Variablennamen.
+\item Ueberladungen dürfen andere Rueckgabetypen haben!
+\end{itemize}}
+
+\begin{frame}[fragile]{Operatorüberladung}
+\begin{TPCpp}
+rational& operator+= (rational& a, const rational b){
+	a.n = a.n * b.d + a.d * b.n;
+	a.d *= b.d;
+	return a;
+}
+\end{TPCpp}
+
+\[\frac{a_n}{a_d} \leftarrow \frac{a_n}{a_d}+\frac{b_n}{b_d} = \frac{a_n\cdot b_d}{a_d\cdot b_d}+\frac{b_n\cdot a_d}{b_d\cdot a_d}\]
+
+\vfill
+
+\easyurl{Schönes Tutorial, Beispiele am Ende der Seite}{https://www.tutorialspoint.com/cplusplus/cpp_overloading.htm}
+\end{frame}
+
+\note{\begin{itemize}
+\item Jetzt da wir eigene Datentypen machen koennen lohnt es sich
+Operatoren neu zu definieren, damit sie auch fuer unsere speziellen
+Datentypen funktionieren.
+\item Funktionstyp per Konvention: Zuweisungsoperatoren geben eine
+Referenz zurueck! Somit ist eine Verkettung von Zuweisungen moeglich.
+\item Funktionsname: Schluesselwort operator und danach der Operator.
+\item Funktionsargumente: Binaerer Operator, hat 2 Argumente:
+Dasjenige auf der linken Seite und dasjenige auf der rechten Seite.
+Sie werden in dieser Reihenfolge ueberreicht.
+\end{itemize}}
+
+\begin{frame}[fragile]{Operatorüberladung}
+\begin{TPCpp}
+rational& operator+= (rational& a, const rational b){
+	a.n = a.n * b.d + a.d * b.n;
+	a.d *= b.d;
+	return a;
+}
+
+rational operator+ (rational a, const rational b){
+	return a += b;
+}
+\end{TPCpp}
+\end{frame}
+
+\note{\begin{itemize}
+\item Rueckgabetyp hier ist ein Wert, keine Referenz.
+\item Grund dafuer ist, dass der Ueberladene += Operator
+wiederverwendet werden soll. Damit das keinen Einfluss auf a
+hat, wird a als Wert uebergeben und dann mit dem += lokal
+veraendert.
+\item So hat man nur eine Implementation fuer 2 Operatoren
+und eine Veraenderung des zugrundeliegenden Typen ist nicht so
+aufwaendig.
+\end{itemize}}
+
+\begin{frame}[fragile]{Operatorüberladung: ++}
+\begin{TFCpp}
+//pre-increment
+rational& operator++ (rational& r){
+	rational s = {1,1};
+	return r += s;
+}
+
+//post-increment
+rational operator++ (rational& r, int i){
+	rational s = {1,1};
+	rational r_0 = r;
+	r += s;
+	return r_0;
+}
+\end{TFCpp}
+\end{frame}
+
+\note{\begin{itemize}
+\item In seiner grundlegenden Implementation erlaubt das pre-increment
+Verkettung. Das post-increment erlaubt das nicht. Beruhend auf dieser
+Tatsache werden diese Ueberladungen ausgelegt. Das fuehrt zu folgendem:
+\item Das pre-increment gibt eine Referenz zurueck (Verkettung),
+und nimmt als Parameter eine Referenz auf, da das Ziel der Operation
+eine Veraenderung des aufrufenden Parameters ist.
+\item Das post-increment gibt einen Wert zurueck (keine Verkettung),
+und nimmt als Parameter ebenfalls eine Referenz auf, da wiederum das Ziel der Operation eine Veraenderung des aufrufenden Parameters ist.
+\item Es kann im speziellen keine Referenz zurueckgegeben werden, da der 
+Sinn des post-increments darin liegt den unveraenderten Wert der
+Variable zurueckzugeben, welcher nur als lokale Variable zur Verfuegung
+steht.
+\item Zur Unterscheidung der beiden Funktionen (im Prinzip
+Ueberladungen) erhaelt das post-increment einen Dummyparameter int i.
+\item some more
+content
+content
+\end{itemize}}
+
+\begin{frame}[fragile]{Operatorüberladung: $<<$}
+\begin{TPCpp}
+std::ostream& operator<<
+(std::ostream& o, rational r){
+	o<< r.n << "/" << r.d;
+	return o;
+}
+
+int main(){
+	rational r = {3,2};
+	cout<<r<<r<<endl;
+}
+\end{TPCpp}
+
+\vfill
+
+\easyurl{Operatorüberladung auf codeboard}{https://codeboard.io/projects/81143}\hfill\easyurl{Operatorpräzedenz}{http://en.cppreference.com/w/cpp/language/operator_precedence}
+\end{frame}
+
+\note{\begin{itemize}
+\item Beim Aufruf erhaelt der <<-Operator einen outstream von links
+und einen r-value von rechts.
+\item Es muss wieder eine Referenz auf den aufrufenden outstream 
+zurueckgegeben werden, damit eine Verkettung mehrerer << moeglich ist.
+\end{itemize}}
+
+\begin{frame}[fragile]{Const reference}
+\begin{TFCpp}
+int a = 5;
+int& b = a;
+const int& c = a;
+
+c++; // runtime error
+b++; // a is now 6
+a++; // a is now 7
+\end{TFCpp}
+\end{frame}
+
+\note{\begin{itemize}
+\item const vor einer Referenz heisst, dass das referenzierte Datum
+nicht veraendert werden kann.
+\end{itemize}}
+
+\begin{frame}[fragile]{Const reference}
+\begin{TFCpp}
+void print_result (const double& result){
+	cout<<result;
+}
+\end{TFCpp}
+\end{frame}
+
+\note{\begin{itemize}
+\item result ist somit eine Referenz auf eine const double
+\item Lesen wie bei Pointern von rechts nach links
+\item So wird result ganz sicher nicht veraendert!
+\end{itemize}}
+
+\begin{frame}[fragile]{Const reference}
+\begin{TFCpp}
+const int& a = 5; //Referenz zu r-value
+
+void print_result (const double& result){
+	cout<<result;
+}
+
+print_result(5); //funktioniert!
+\end{TFCpp}
+\end{frame}
+
+\note{\begin{itemize}
+\item Da c++ konstante Referenzen zu r-values erlaubt, ist es moeglich
+print\_result mit Literalen aufzurufen. So schlaegt man zwei Fliegen
+mit einer Klappe. Erstens wird beim Aufruf ueber eine Variable keine
+Kopie erzeugt dank der Referenz und weiter kann die Funktion trotzdem
+noch auf r-values angewandt werden, was mit nicht const Referenzen
+nicht moeglich waere.
+\end{itemize}}
+
+\end{document}
+
