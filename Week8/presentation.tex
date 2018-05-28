@@ -1,6 +1,6 @@
 %===========================================================================
 %generation of assignment and solution in one .tex file. make sure that write18 is activated(--enable-write18 for example as you call pdflatex.exe)
-\gdef\conditionmacro{3}
+%\gdef\conditionmacro{3}
 \ifx\conditionmacro\undefined 
 \immediate\write18{%
 	pdfLaTeX --jobname="presentation_handout"
@@ -38,11 +38,11 @@
 \maketitle
 
 \begin{TFTimeSchedule}
-\item 20' Self-assessment test
-\item 20' Korrektur
 \item 20' Repetition Pointer und Übung
 \item 10' Iterators
 \item 5' Using
+\item 20' Self-assessment test
+\item 20' Korrektur
 \end{TFTimeSchedule}
 
 \begin{TFLearningObjectives}
