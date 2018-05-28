@@ -1,0 +1,510 @@
+%===========================================================================
+%generation of assignment and solution in one .tex file. make sure that write18 is activated(--enable-write18 for example as you call pdflatex.exe)
+%\gdef\conditionmacro{2}
+\ifx\conditionmacro\undefined 
+\immediate\write18{%
+	pdfLaTeX --jobname="presentation_handout"
+	\gdef\string\conditionmacro{1}\string\input\space\jobname
+}%
+\immediate\write18{%
+	pdfLaTeX --jobname="presentation_with_notes"
+	\gdef\string\conditionmacro{3}\string\input\space\jobname
+}%
+\gdef\conditionmacro{2}
+%\expandafter\stop
+\fi
+%---------------------------------------------------------------------------
+
+\ifnum\conditionmacro=1 \documentclass[handout,usenames,dvipsnames]{beamer}\fi
+\ifnum\conditionmacro=2 \documentclass[usenames,dvipsnames]{beamer} \fi
+\ifnum\conditionmacro=3 \documentclass[notes,handout,usenames,dvipsnames]{beamer}
+\usepackage{pgfpages}
+\setbeameroption{show notes on second screen=left} \fi
+
+\usetheme{Boadilla}
+
+\input{../HEADERFILES_FOR_LATEX/PACKAGES}
+\input{../HEADERFILES_FOR_LATEX/ENVIRONMENTS}
+\input{../Presentation/PRESENTATION_ENVIRONMENTS}
+\input{../HEADERFILES_FOR_LATEX/COMMANDS}
+\graphicspath{{./Pictures/}}
+
+\title{Exercise Week 12}
+\author{GianAndrea Müller\\ \url{mailto:muellegi@student.ethz}}
+\date{\today}
+
+\begin{document}
+%Make title page from above supplied information on title, author, etc.
+\maketitle
+
+\begin{TFTimeSchedule}
+\item 30' Vectors class
+\item 10' Dynamisch allokierter Speicherplatz
+\item 10' Dynamische Datentypen
+\end{TFTimeSchedule}
+
+\begin{TFLearningObjectives}
+\item Verständnis: Klassen
+\item Kenntnis von Dynamischer Speicherverwaltung
+\item Kenntnis von Dynamischen Datenstrukturen
+\end{TFLearningObjectives}
+
+\begin{frame}{Klassen: Motivation}
+\begin{block}{Was}
+\begin{itemize}
+\item Klassen: Kombination von Variablen und Funktionen
+\item Instanzen
+\item Objekte
+\end{itemize}
+\end{block}
+
+\begin{block}{Objektorientiertes Programmieren}
+Die Grundidee besteht darin, die Architektur einer Software an den Grundstrukturen desjenigen Bereichs der Wirklichkeit auszurichten, der die gegebene Anwendung betrifft.
+\end{block}
+
+\begin{block}{Wieso}
+\begin{itemize}
+\item Verkapselung
+\item Wiederverwendbarkeit
+\end{itemize}
+\end{block}
+
+\easyurl{Objektorientiertes Programmieren}{https://de.wikipedia.org/wiki/Objektorientierte_Programmierung}
+\end{frame}
+
+\begin{frame}[fragile]{Klassen: Grundlagen}
+\begin{block}{Mitglieder}
+\begin{itemize}
+\item \textbf{Mitgliedsfunktion}:
+
+Funktion die in der Klasse angelegt wird.
+\item \textbf{Mitgliedsvariable}: 
+
+Variable die in der Klasse angelegt wird.
+\end{itemize}
+
+Mitglieder können nur über eine Instanz der Klasse aufgerufen werden. 
+\end{block}
+
+\begin{TPCpp}
+//Definition der Klasse
+class Vector {...}; 
+Vector v1; //Deklaration einer Instanz
+v1.memberVariable;
+v1.memberFunction();
+Vector* pv1 = &v1;
+pv1->memberVariable;
+\end{TPCpp}
+\end{frame}
+
+\note{\begin{itemize}
+\item Zugriff auf Mitglieder ueber eine Instanz der
+Klasse funktioniert mit dem Punktoperator.
+\item Zugriff auf Mitglieder ueber einen Pointer
+auf eine Instanz funktioniert mit dem Pfeiloperator.
+Dieser ist gleichwertig mit *(pointer).member.
+\end{itemize}}
+
+\begin{frame}[fragile]{Klassen: Grundlagen}
+\begin{block}{Verkapselung}
+\begin{itemize}
+\item \textbf{Private Mitglieder}:
+
+Nach dem Schlüsselwort \verb+private+ kommen alle Variablen die versteckt sein sollen.
+\item \textbf{Öffentliche Mitglieder}:
+
+Nach dem Schlüsselwort \verb+public+ kommen alle Variablen die öffenlich sein sollen.
+\end{itemize}
+
+Nur öffenlichte Mitglieder können über einen der beiden Zugriffsoperatoren erreicht werden. 
+
+\vspace{3ex}
+
+Mitgliedsfunktionen haben Zugriff auf private Migliedsvariablen.
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Klassen: Grundlagen}
+\begin{TFCpp}
+class Vector {
+private:
+	double x;
+	double y;
+};
+\end{TFCpp}
+
+\null\vfill\null
+
+\easyurl{Codeboard}{https://codeboard.io/projects/82028}$\hfill$\easyurl{Zusätzliches Beispiel}{https://codeboard.io/projects/81739}
+\end{frame}
+
+\begin{frame}[fragile]{Klassen: Konstruktoren}
+\begin{block}{Konstruktor}
+\begin{itemize}
+\item Öffentliche Mitgliedsfunktion
+\item Wird automatisch beim Erstellen einer Instanz der Klasse aufgerufen!
+\item Wird eingesetzt um Mitgliedsvariablen zu initialisieren.
+\end{itemize}
+\end{block}
+\begin{TPCpp}
+public: 
+	Vector (){
+		x = 0;
+		y = 0;
+	}
+	Vector (double _x, double _y) : x(_x), y(_y) {}
+\end{TPCpp}
+\end{frame}
+
+\note{\begin{itemize}
+\item Der Konstruktor ist eine Funktion mit dem Namen der Klasse.
+\item Der default-Konstruktor, der keine Argumente uebernimmt wird aufgerufen, wenn eine Instanz der Klasse erzeugt wird und keine Argumente uebergeben werden.
+\item Der nicht-default-Konstruktor mit 2 Argumenten ist eine Ueberladung des default-Konstruktors.
+\item Die Initialisierungsliste wird benutzt um Mitgliedsvariablen 
+zu initialisieren. Sie ist hier nicht strikt notwending,
+wird aber gebraucht sobald eine Klasse konstante
+Mitgliedsvariablen hat, denn diese koennen nur so
+initialisiert werden.
+\end{itemize}}
+
+\begin{frame}[fragile]{Klassen: Konstruktoren}
+\begin{TFCpp}
+class Vector {
+	double x;
+	double y;
+public:
+	Vector () : x(0),y(0){}
+	Vector (double _x, double _y) 
+		: x(_x),y(_y) {}
+};
+
+Vector v1;
+Vector v2();
+Vector v3(1.0, 2.3);
+\end{TFCpp}
+\end{frame}
+
+\note{\begin{itemize}
+\item Mitglieder ohne spezifizierung sind automatisch privat!
+\item Der Konstruktor wird auch ohne Klammern aufgerufen.
+\item Der Konstruktor folgt immer dem Schema
+$<$Klassenname$>$ ($<$argumente$>$) $<$initialisierungsliste$>$
+$\{<$aktionen$>\}$
+\item Der Konstruktor hat immer den Rueckgabetyp void.
+Das wird nicht extra angegeben sondern ist so bereits
+vorgemerkt.
+\end{itemize}}
+
+\begin{frame}[fragile]{Klassen: Zugriffsmethoden}
+\begin{block}{Zugriff}
+\begin{itemize}
+\item Der Zugriff ist durch Verkapselung eingeschränkt.
+\item Lösung: Sicherer Zugriff mit Zugriffsmethoden.
+\end{itemize}
+\end{block}
+
+\vfill
+
+\begin{TPCpp}
+double get_x() const {return x;}
+double get_y() const {return y;}
+
+void set_x(const double _x) {x = _x;}
+void set_y(const double _y) {y = _y;}
+\end{TPCpp}
+\end{frame}
+
+\note{\begin{itemize}
+\item Konstante Mitgliedsfunktionen koennen
+Mitgliedsvariablen nicht verändern (ausser diese sind
+mutable).
+\end{itemize}}
+
+\begin{frame}[fragile]{Klassen: Zugriff auf Mitglieder}
+\begin{block}{this}
+\begin{itemize}
+\item Der \verb+this+ Pointer speichert die Adresse seiner Instanz einer Klasse.
+\item Er ist in jeder Klasse vorhanden und kann in Mitgliedsfunktionen benutzt werden um auf die aktuelle Instanz zuzugreifen.
+\end{itemize}
+\end{block}
+
+\vfill
+
+\begin{TPCpp}
+double get_x() const {return this->x;}
+double get_y() const {return (*this).y;}
+\end{TPCpp}
+
+\end{frame}
+
+\begin{frame}[fragile]{Klassen: Arithmetische Operatoren}
+\begin{block}{Argumentübergabe}
+\begin{itemize}
+\item Die Operatoren, die als Mitgliedsfunktion überladen werden, erhalten die aufrufende Instanz als erstes Argument.
+\item Der Rückgabetyp hängt vom überladenen Operator ab. Für Zuweisungen wird eine Referenz zurückgegeben.
+\end{itemize}
+\end{block}
+
+\begin{TPCpp}
+Vector& operator+= (const Vector& b){
+    x += b.get_x();
+    y += b.get_y();
+    return *this;
+}
+//Im main:
+Vector v3(3,4),v4(1,2);
+v3 += v4;
+\end{TPCpp}
+\end{frame}
+
+\begin{frame}[fragile]{Klassen: Arithmetische Operatoren}
+\begin{TFCpp}
+Vector& operator+= (const Vector& b){
+    x += b.get_x();
+    y += b.get_y();
+    return *this;
+}
+
+//Ausserhalb der Klasse
+Vector operator+ (const Vector& a, const Vector& b) {
+	Vector res = a;
+	res += b;
+	return res;
+}
+\end{TFCpp}
+
+\end{frame}
+
+\note{\begin{itemize}
+\item Wenn die Ueberladung des += operators ausserhalb
+der Klasse stattfindet erlaubt er implizite Typen-
+konversion. Ansonten muesste er immer ueber eine
+Instanz der Klasse aufgerufen werden.
+\end{itemize}}
+
+\note{\begin{itemize}
+\item Normalerweise werden diese Funktionen neu
+definiert sobald eine dynamische Datenstruktur 
+eingefuehrt wird, die nach der Verwaltung von
+dynamisch angelegtem Speicherplatz verlangt.
+Dann ist es unerlaesslich diese drei Funktionen
+entsprechend auszulegen.
+\end{itemize}}
+
+\begin{frame}[fragile]{Dynamische allokierter Speicherplatz}
+\begin{TFCpp}
+int * dyn_int = new int (3);
+
+int size = 5;
+int * dyn_array = new int [size];
+\end{TFCpp}
+\end{frame}
+
+\note{\begin{itemize}
+\item Diese beiden Befehle geben einen Zeiger auf
+den Anfang des neu allokierten Speicherplatzes zurueck.
+\item Die Laenge des neuen Speicherplatzes muss fuer 
+Arrays zwingend gespeichert werden!
+\item Dynamisch angelegter Speicher muess am Ende der 
+Nutzung geloescht werden!
+\end{itemize}}
+
+\begin{frame}[fragile]{Dynamische allokierter Speicherplatz}
+\begin{TPCpp}
+int * dyn_int = new int (3);
+
+int size = 5;
+int * dyn_array = new int [size];
+
+delete dyn_int;
+dyn_int = 0;
+delete[] dyn_array;
+dyn_array = NULL;
+\end{TPCpp}
+\end{frame}
+
+\note{\begin{itemize}
+\item Wird der Speicherplatz nicht wieder durch delete
+freigegeben ist er fuer das Programm nicht mehr nutzbar.
+\item Nach dem Loeschen ist der Speicherplatz
+freigegeben, jedoch der Pointer noch vorhanden.
+Dieser wird dann auf 0 gesetzt, damit klar ist, dass
+er auf nichts zeigt.
+\item delete ruft den Destruktor auf.
+\end{itemize}}
+
+\begin{frame}[fragile]{Dynamische Datentypen - Stack}
+\begin{TFCpp}
+class stack {
+public:
+	void push (int value){...}
+	int pop (){}
+	...
+	void print (){...}
+	
+private:
+	ln* top_node; //ln = list node
+};
+
+struct ln {
+	int key;
+	ln * next;
+}
+\end{TFCpp}
+\end{frame}
+
+\begin{frame}[fragile]{Dynamische Datentypen - Stack}
+\begin{TPCpp}
+stack s1;
+s1.push(1);
+s1.push(2);
+s1.push(3);
+s2(s1);
+\end{TPCpp}
+
+\begin{center}
+\includegraphics[width=0.9\linewidth]{Pictures/Stack1}
+\end{center}
+
+\end{frame}
+
+\note{\begin{itemize}
+\item Mit dem Standard Kopierkonstruktor werden einfach
+die Mitgliedsvariablen der Struktur kopiert. In
+diesem Fall also ein Pointer auf das erste Element
+des Stacks.
+\item Da wird gerne eine sogenannte tiefe Kopie
+haben moechten reicht uns das nicht.
+\end{itemize}}
+
+\begin{frame}[fragile]{Dynamische Datentypen - Stack - Tiefe Kopie}
+\begin{TFCpp}
+stack::stack(const stack& s) : top_node(0) {
+	copy(s.top_node, top_node);
+}
+
+void stack::copy(const ln* from, ln*& to){
+	assert (to == 0);
+	if(from != 0){
+		to = new ln(from->key);
+		copy(from->next, to->next);
+	}
+}
+\end{TFCpp}
+
+\begin{TPCpp}
+s2(s1);
+\end{TPCpp}
+
+\end{frame}
+
+\note{\begin{itemize}
+\item Der Kopierkonstruktor hat als Argument eine Referenz, da die Übergabe eines einfachen Wertes bereits einen Kopiervorgang benötigen würde!
+\end{itemize}}
+
+\begin{frame}[fragile]{Dynamische Datentypen - Stack - Zuweisung}
+\begin{TPCpp}
+stack s2;
+s2.push(4);
+s2.push(9);
+s2 = s1;
+\end{TPCpp}
+
+
+\begin{center}
+\includegraphics[width=0.9\linewidth]{Pictures/Stack2}
+\end{center}
+\end{frame}
+
+\note{\begin{itemize}
+\item Der Zuweisungsoperator macht immer noch eine oberflacheliche 
+Kopie, setzt also nur alle Mitgliedsvariablen von s1 gleich die von s2.
+\item Um das zu beheben ueberladen wir den Zuweisungsoperator.
+\end{itemize}}
+
+\begin{frame}[fragile]{Dynamische Datentypen - Stack - Zuweisung}
+\begin{TFCpp}
+void stack::clear(ln* from){
+	if (from != 0){
+		clear(from->next);
+		delete from;
+	}
+}
+\end{TFCpp}
+\end{frame}
+
+\note{\begin{itemize}
+\item Bevor zugewiesen werden kann, muss der Empfaenger der Zuweisung
+seinen Stack leeren. Dazu wird clear implementiert.
+\end{itemize}}
+
+\begin{frame}[fragile]{Dynamische Datenstrukturen - Stack - Zuweisung}
+\begin{TPCpp}
+stack& stack::operator= (const stack& s) {
+	if (top_node != s.top_node) { // test for self-assignment
+		clear(top_node);
+		top_node = 0; // fix dangling pointer
+		copy(s.top_node, top_node);
+	}
+return *this;
+}
+\end{TPCpp}
+
+\begin{TPCpp}
+s1 = s2;
+\end{TPCpp}
+
+\end{frame}
+
+\note{\begin{itemize}
+\item Vor der Ueberschreibung wird geprueft ob der 
+Stack sich selbst zugewiesen wird.
+\item Falls nicht wird die aufrufende Instanz
+geloescht und dann mit der Kopierfunktion ueberschrieben
+\item Schliesslich wird der Konvention entsprechend
+eine Referenz auf die aufrufende Instanz uebergeben.
+Das bewirkt weiter, dass der Zuweisungsoperator
+verkettet werden kann.
+\end{itemize}}
+
+\begin{frame}[fragile]{Dynamische Datenstrukturen - Stack - Destruktor}
+\begin{TFCpp}
+void useStack(){
+	stack temp;
+	temp.push(2);
+	temp.pop();
+} //end of scope, destruction
+
+stack::~stack() {
+	clear(top_node);
+}
+\end{TFCpp}
+\end{frame}
+
+\note{\begin{itemize}
+\item Beim Loeschen eines Objekts wird immer dessen
+Destruktor aufgerufen. Damit im Falle einer
+dynamischen Datenstruktur auch alle dynamisch
+allokierten Speicherplaetze freigegeben werden
+muss der Destruktor entsprechend definiert werden.
+\item Daher wird die clear-Funktion fuer alle
+angehaengten Nodes aufgerufen. Die uebrigen
+Mitglieder der Instanz werden automatisch geloescht.
+\end{itemize}}
+
+\begin{frame}{Klassen: Spezielle Mitgliedsfunktionen}
+\begin{block}{Standardmitglieder}
+\begin{itemize}
+\item Defaultkonstruktor
+\item Kopierkonstruktor
+\item Zuweisungsoperator
+\item Defaultdestruktor
+\end{itemize}
+
+\end{block}
+
+\textbf{Regel der drei:} Wenn entweder Destruktor, Kopierkonstruktor und Zuweisungsoperator neu definiert werden sollten alle drei neu definiert werden.
+\end{frame}
+
+\end{document}
+
