@@ -1,0 +1,294 @@
+%===========================================================================
+%generation of assignment and solution in one .tex file. make sure that write18 is activated(--enable-write18 for example as you call pdflatex.exe)
+\gdef\conditionmacro{3}
+\ifx\conditionmacro\undefined 
+\immediate\write18{%
+	pdfLaTeX --jobname="presentation_handout"
+	\gdef\string\conditionmacro{1}\string\input\space\jobname
+}%
+\immediate\write18{%
+	pdfLaTeX --jobname="presentation_with_notes"
+	\gdef\string\conditionmacro{3}\string\input\space\jobname
+}%
+\gdef\conditionmacro{2}
+%\expandafter\stop
+\fi
+%---------------------------------------------------------------------------
+
+\ifnum\conditionmacro=1 \documentclass[handout,usenames,dvipsnames]{beamer}\fi
+\ifnum\conditionmacro=2 \documentclass[usenames,dvipsnames]{beamer} \fi
+\ifnum\conditionmacro=3 \documentclass[notes,handout,usenames,dvipsnames]{beamer}
+\usepackage{pgfpages}
+\setbeameroption{show notes on second screen=left} \fi
+
+\usetheme{Boadilla}
+
+\input{../HEADERFILES_FOR_LATEX/PACKAGES}
+\input{../HEADERFILES_FOR_LATEX/ENVIRONMENTS}
+\input{../Presentation/PRESENTATION_ENVIRONMENTS}
+\input{../HEADERFILES_FOR_LATEX/COMMANDS}
+\graphicspath{{./Pictures/}}
+
+\title{Exercise Week 12}
+\author{GianAndrea Müller\\ \url{mailto:muellegi@student.ethz}}
+\date{\today}
+
+\begin{document}
+%Make title page from above supplied information on title, author, etc.
+\maketitle
+
+\begin{TFTimeSchedule}
+\item 10' Wiederholung Klassen
+\item 10' Vererbung
+\item 10' Polymorphie und Abstrakte Basisklassen
+\item 10' Konstruktoren
+\end{TFTimeSchedule}
+
+\begin{TFLearningObjectives}
+\item Verständnis: Vererbung
+\item Andwendung: Polymorphismus
+\end{TFLearningObjectives}
+
+\begin{frame}[fragile]{Klassen: Wiederholung}
+\begin{block}{Was wir gelernt haben:}
+\begin{itemize}
+\item \textbf{Mitgliedsfunktion}
+\item \textbf{Mitgliedsvariable}
+\item \textbf{Zugriffsoperatoren}
+\end{itemize}
+\end{block}
+
+\begin{TPCpp}
+class example {
+public:
+	void print() {std::cout<<this->member;}
+private:
+	int member = 3;
+}
+
+int main(){
+	example a;
+	a.print();
+}
+\end{TPCpp}
+\end{frame}
+
+\note{\begin{itemize}
+\item Eine \textbf{Mitgliedsfunktion} ist eine in der 
+Klasse definierte Funktion, die direkten Zugriff auf
+oeffentliche und private Mitgliedsvariablen hat.
+\item Eine \textbf{Mitgliedsvariable} ist eine in der
+Klasse definierte Variable.
+\item Die Zugriffsoperatoren erlauben den Zugriff auf
+oeffentliche Mitglieder einer Instanz.
+\end{itemize}}
+
+\begin{frame}[fragile]{Klassen: Wiederholung}
+\begin{block}{Was wir gelernt haben:}
+\begin{itemize}
+\item \textbf{Zugriffsbereiche}
+\item \textbf{Zugriffsmethoden}
+\end{itemize}
+\end{block}
+\end{frame}
+
+\note{\begin{itemize}
+\item Es gibt den oeffentlichen und den privaten Zugriffsbereich.
+Oeffentlich heisst: Nicht verfuegbar von aussen, ueber Zugriffsoperatoren.
+Nur ueber Mitgliedsfunktionen erreichbar.
+\item Zugriffsmethoden erlauben ein klar definiertes Interface zu den
+privaten Mitgliedsvariablen. Sie koennen beispielsweise ueberpruefen
+ob ein gueltiger Wert zugewiesen wird.
+\end{itemize}}
+
+\begin{frame}[fragile]{Klassen: Wiederholung}
+\begin{block}{Was wir gelernt haben:}
+\begin{itemize}
+\item \textbf{Konstruktor}
+\item \textbf{Kopierkonstruktor}
+\item \textbf{Zuweisungsoperator}
+\item \textbf{Destruktor}
+\end{itemize}
+\end{block}
+\end{frame}
+
+\note{\begin{itemize}
+\footnotesize
+\item Alle diese Mitgliedsfunktionen existieren standardmaessig fuer
+jede Klasse und muessen fuer dynamische Datenstrukturen angepasst
+werden.
+\item Der Konstruktor ist eine Mitgliedsfunktion, die den Namen der Klasse
+traegt. Sie wird IMMER wenn eine Instanz der Klasse generiert wird
+automatisch aufgerufen, kann ueberladen werden und wird, wenn eine
+entsprechende Ueberladung vorhanden ist auch fuer implizite
+Typenumwandlungen verwendet (automatisch).
+\item Der Kopierkonstruktor wird dann aufgerufen, wenn eine Instanz einer
+Klasse eine Kopie einer anderen Instanz derselben Klasse werden soll.
+\item Der Zuweisungsoperator muss ueberladen werden, falls eine Klasse 
+dynamische Mitgliedsvariablen hatt, damit eine tiefe Kopie der Instanz
+erzeugt wird.
+\item Der Destruktor ist eine Mitgliedsfunktion, die den Namen der Klasse
+mit einem vorgeschalteten Tilde traegt. Sie wird immer automatisch
+aufgerufen, wenn eine Instanz ihren Gueltigkeitsbereich verlaesst und
+geloescht werden muss.
+\normalsize
+\end{itemize}}
+
+\begin{frame}[fragile]{Klassen: Wiederholung}
+\begin{block}{Was wir gelernt haben:}
+\begin{itemize}
+\item \textbf{Operatoren}
+\end{itemize}
+\end{block}
+\end{frame}
+
+\note{\begin{itemize}
+\item Die Operatoren, die fuer einfache Datentypen standardmaessig
+verfuegbar sind, muessen fuer neu eingefuehrte Datentypen ueberladen
+werden, damit sie wieder Nutzbar sind.
+\item Dabei hat man die Moeglichkeit Operatoren als Mitgliedsfunktionen
+zu definieren, damit der Zugriff auf private Mitglieder gegeben ist.
+\item Um automatische implizite Typenkonversion zu erlauben, koennen
+Operatoren auch global ueberladen werden (nicht als Mitgliedsfunktion).
+Dann wird der operator, wenn er eine Kombination von Argumenten mit 
+verschiedenen Typen hat, versuchen diese entsprechend zu konvertieren.
+\item Ein gutes Beispiel ist die Definition des += Operators als
+Mitgliedsfunktion, damit der Zugriff auf Mitglieder gegeben ist. 
+Dann kann der + Operator global definiert werden, und innerhalb
+auf die Definition von += zurueckgegriffen werden. So nutzt
+man effektiv die Vorteile beider Implementationen und muss weiterhin
+bei einer Anpassung der Mitglieder nur einen der beiden anpassen.
+\end{itemize}}
+
+\begin{frame}[fragile]{Vererbung: Grundlagen}
+\begin{TFCpp}
+class A{
+	... //Basisklasse
+};
+
+class B: public A{
+	... //Abgeleitete Klasse
+};
+
+class C: public B{
+	... 
+};
+\end{TFCpp}
+\end{frame}
+
+\note{\begin{itemize}
+\item Vererbung erlaubt alle Mitglieder einer Basisklasse in einer
+abgeleiteten Klasse zu uebernehmen und weitere hinzuzufuegen.
+So kann einmal geschriebener code mehrfach verwendet werden. Weiter
+kann eine ganze Familie von Klassen die ihre grundlegenden Eigenschaften
+identisch Teilen. Die selben grundlegenden Eigenschaften (Basisklasse)
+koennen dann auf fuer den ganzen Vererbungsbaum auf einen Schlag
+angepasst werden.
+\end{itemize}}
+
+\begin{frame}[fragile]{Vererbung: Zugriffskontrolle}
+
+\begin{tabular}{|l|lll|}
+\hline
+Vererbung \verb+\+ Mitglied & \verb+public+ & \verb+protected+ & \verb+private+\\\hline
+\verb+public+&\verb+public+&\verb+protected+&n/a\\
+\verb+protected+&\verb+protected+&\verb+protected+&n/a\\
+\verb+private+&\verb+private+&\verb+private+&n/a\\\hline
+\end{tabular}
+\end{frame}
+
+\begin{frame}[fragile]{Polymorphismus}
+\begin{TFCpp}
+class A {
+	virtual void print() 
+	{cout<<"A"<<endl;}
+};
+
+class B : public A {
+	void print()
+	{cout<<"B"<<endl;}
+};
+
+A instantce1;
+instance1.print();
+B instance2;
+instance2.print();
+A * pointer1 = &instance2;
+pointer1->print();
+\end{TFCpp}
+\end{frame}
+
+\note{\begin{itemize}
+\item virtual bewirkt, dass die nachfolgende Methode, wenn sie in einer
+Subklasse ueberschreiben wird bei Laufzeit dynamisch auswaehlt, welcher
+Typ die aufrufende Instanz hat.
+\item Das heisst ein Pointer der Basisklasse kann sowohl auf eine Instanz
+der Basisklasse, wie auch auf eine Instanz einer davon abgleiteten Klasse
+zeigen. Fuer nicht virtuelle Mitgliedsfunktionen wird dann ueber den Typ
+des Pointers bestimmt welche Mitgliedsfunktion ausgefuehrt wird. Fuer
+virtuelle Mitgliedsfunktionen wird dynamisch ausgewertet auf welche Instanz
+der Pointer zeigt, und dann deren Version der Mitgliedsfunktion
+ausgefuehrt.
+\end{itemize}}
+
+\begin{frame}{Polymorphismus und dynamische Bindung}
+Ausgangspunkt: Abgeleitete Klasse die virtuelle Mitgliedsfunktion ihrere Basisklasse überschreibt.
+
+Frage: Wann wird welche Version der Mitgliedsfunktion aufgerufen?
+\begin{block}{Faustregeln}
+\begin{enumerate}
+\item Bei direktem Aufruf über eine Instanz wird immer die dem Typ entsprechende Mitgliedsfunktion aufgerufen.
+\item Bei indirektem Aufruf über einen Pointer wird für nicht virtuelle Mitgliedsfunktionen immer die dem Typ des Pointers entsprechende Mitgliedsfunktion aufgerufen.
+\item Bei indirektem Aufruf über einen Pointer wird für virtuelle Mitgliedsfunktionen immer die dem dereferenzierten Typ des Pointers entsprechende Mitgliedsfunktion aufgerufen.
+\end{enumerate}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Abstrakte Basisklasse}
+\begin{TFCpp}
+class A {
+	virtual void print() = 0;
+};
+
+class B : public A {
+	void print()
+	{cout<<"B"<<endl;}
+};
+
+//A instance1; //Forbidden
+A * pointer1 = new B; //Allowed
+\end{TFCpp}
+\end{frame}
+
+\note{\begin{itemize}
+\item Wenn eine virtuelle Mitgliedsfunktion = 0 gesetzt wird, wird sie zur
+rein virtuellen Methode und die inhabende Klasse wird zur abstrakten
+Basisklasse.
+\item Das heisst, das die Klasse nicht mehr instantiiert werden kann,
+sondern nur als Basis fuer abgeleitete Klassen fungiert.
+\end{itemize}}
+
+\begin{frame}[fragile]{Konstruktoren}
+\begin{TFCpp}
+class A {
+	int a;
+public:
+	A(int _a) : a(_a){}
+};
+
+class B : public A {
+	int b;
+public:
+	B(int _a, int _b) : A(_a), b(_b) {}
+};
+\end{TFCpp}
+\end{frame}
+
+\note{\begin{itemize}
+\item Da die privaten Mitgliedsvariablen der Basisklasse fuer die 
+abgeleiteten Klassen nicht mehr verfuegbar sind, muss im Konstruktor
+der abgeleiteten Klasse der Konstruktor der Basisklasse aufgerufen werden.
+\end{itemize}}
+
+\end{document}
+
