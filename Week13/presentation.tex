@@ -1,6 +1,6 @@
 %===========================================================================
 %generation of assignment and solution in one .tex file. make sure that write18 is activated(--enable-write18 for example as you call pdflatex.exe)
-\gdef\conditionmacro{3}
+%\gdef\conditionmacro{3}
 \ifx\conditionmacro\undefined 
 \immediate\write18{%
 	pdfLaTeX --jobname="presentation_handout"
@@ -42,6 +42,7 @@
 \item 10' Vererbung
 \item 10' Polymorphie und Abstrakte Basisklassen
 \item 10' Konstruktoren
+\item 10' Has a - is a
 \end{TFTimeSchedule}
 
 \begin{TFLearningObjectives}
@@ -64,7 +65,7 @@ public:
 	void print() {std::cout<<this->member;}
 private:
 	int member = 3;
-}
+};
 
 int main(){
 	example a;
@@ -90,6 +91,15 @@ oeffentliche Mitglieder einer Instanz.
 \item \textbf{Zugriffsmethoden}
 \end{itemize}
 \end{block}
+\begin{TPCpp}
+class example {
+private:
+	int variable;
+public:
+	int get_variable();
+	void set_variable(int value);
+};
+\end{TPCpp}
 \end{frame}
 
 \note{\begin{itemize}
@@ -110,6 +120,8 @@ ob ein gueltiger Wert zugewiesen wird.
 \item \textbf{Destruktor}
 \end{itemize}
 \end{block}
+
+\easyurl{Regel der Drei}{https://en.wikipedia.org/wiki/Rule_of_three_(C\%2B\%2B_programming)}
 \end{frame}
 
 \note{\begin{itemize}
@@ -140,6 +152,16 @@ geloescht werden muss.
 \item \textbf{Operatoren}
 \end{itemize}
 \end{block}
+
+\begin{block}{Erkenntnisse}
+\begin{itemize}
+\item Für neue Datenstrukturen brauchen wir neue Operatorüberladungen.
+\item Operatoren als Mitgliedsfunktionen
+\item Operatoren als globale Überladungen
+\item Implizite Typenumwandlung
+\end{itemize}
+\end{block}
+
 \end{frame}
 
 \note{\begin{itemize}
@@ -289,6 +311,79 @@ public:
 abgeleiteten Klassen nicht mehr verfuegbar sind, muss im Konstruktor
 der abgeleiteten Klasse der Konstruktor der Basisklasse aufgerufen werden.
 \end{itemize}}
+
+\begin{frame}[fragile]{is a - has a}
+\begin{TFCpp}
+class point {
+public:
+	double x;
+	double y;
+};
+
+class circle : private point {
+private:
+	double radius;
+};
+\end{TFCpp}
+\end{frame}
+
+\note{\begin{itemize}
+\item Die Klasse circle erbt von der Klasse Punkt und
+\textbf{ist} somit ein Punkt.
+\item Dies ist die erste Moeglichkeit der Implementation einer Kreis Klasse die Zugriff auf die
+Variablen eines Punkts hat.
+\end{itemize}}
+
+\begin{frame}[fragile]{is a - has a}
+\begin{TFCpp}
+class point {
+public:
+	double x;
+	double y;
+};
+
+class circle {
+private:
+	double radius;
+	point p;
+};
+\end{TFCpp}
+\end{frame}
+
+\note{\begin{itemize}
+\item Die Klasse circle erbt nicht von point sondern 
+\textbf{hat} einen Punkt als Mitglied.
+\item Der Unterschied beider Implementierungen ist
+minimal, eigentlich unterscheidet sich nur der
+Zugriff auf die Mitgliedsvariablen des Punkts.
+\item Sprachlich unterscheidet man von Fall 1 
+\textbf{``ist''} zu Fall 2 \textbf{``hat''} einen
+Punkt.
+\end{itemize}}
+
+\begin{frame}[fragile]{is a - has a}
+\begin{TFCpp}
+class University {
+private:
+	std::vector<Student> students_;
+};
+
+class Student {
+private:
+	Legi legi_;
+};
+
+class Phys_Student : public Student {};
+
+class Legi {
+	int immatriculation_year_;
+};
+\end{TFCpp}
+\end{frame}
+
+\begin{frame}{Prüfungsvorbereitung}
+\easyurl{Alte Prüfungen D-ITET}{http://lec.inf.ethz.ch/itet/informatik1/2017/}\hfill\easyurl{Alte Prüfungen D-PHYS}{http://lec.inf.ethz.ch/ifmp/2017/}
+\end{frame}
 
 \end{document}
 

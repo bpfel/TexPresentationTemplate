@@ -1,6 +1,6 @@
 %===========================================================================
 %generation of assignment and solution in one .tex file. make sure that write18 is activated(--enable-write18 for example as you call pdflatex.exe)
-%\gdef\conditionmacro{2}
+\gdef\conditionmacro{3}
 \ifx\conditionmacro\undefined 
 \immediate\write18{%
 	pdfLaTeX --jobname="presentation_handout"
@@ -282,15 +282,6 @@ konversion. Ansonten muesste er immer ueber eine
 Instanz der Klasse aufgerufen werden.
 \end{itemize}}
 
-\note{\begin{itemize}
-\item Normalerweise werden diese Funktionen neu
-definiert sobald eine dynamische Datenstruktur 
-eingefuehrt wird, die nach der Verwaltung von
-dynamisch angelegtem Speicherplatz verlangt.
-Dann ist es unerlaesslich diese drei Funktionen
-entsprechend auszulegen.
-\end{itemize}}
-
 \begin{frame}[fragile]{Dynamische allokierter Speicherplatz}
 \begin{TFCpp}
 int * dyn_int = new int (3);
@@ -505,6 +496,15 @@ Mitglieder der Instanz werden automatisch geloescht.
 
 \textbf{Regel der drei:} Wenn entweder Destruktor, Kopierkonstruktor und Zuweisungsoperator neu definiert werden sollten alle drei neu definiert werden.
 \end{frame}
+
+\note{\begin{itemize}
+\item Normalerweise werden diese Funktionen neu
+definiert sobald eine dynamische Datenstruktur 
+eingefuehrt wird, die nach der Verwaltung von
+dynamisch angelegtem Speicherplatz verlangt.
+Dann ist es unerlaesslich diese drei Funktionen
+entsprechend auszulegen.
+\end{itemize}}
 
 \end{document}
 
