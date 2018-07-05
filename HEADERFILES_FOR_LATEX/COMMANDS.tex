@@ -112,3 +112,11 @@ Double underline&Tensor&$\tens{I}$\\
 }
 %Usage:
 %Type \statenotation where you'd like to define your notation.
+
+%Checkboxes
+\usepackage{pifont}
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%
+\newcommand{\done}{\rlap{$\square$}{\raisebox{2pt}{\large\hspace{1pt}\cmark}}%
+\hspace{-2.5pt}}
+\newcommand{\wontfix}{\rlap{$\square$}{\large\hspace{1pt}\xmark}}
