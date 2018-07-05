@@ -21,6 +21,13 @@
 }
 }
 
+\newcommand{\pdfpages}[2]{
+{
+\setbeamercolor{background canvas}{bg=}
+\includepdf[pages=#1]{#2}
+}
+}
+
 \newcommand{\pdffilenohandout}[2]{
 \ifnum\conditionmacro=1 
 \begin{frame}{#1}
@@ -171,6 +178,19 @@ morekeywords={nvim, ls}
 	\endminipage%
 }
 
+%For multiple fields within one slide
+\lstnewenvironment{TPBash}[1][]{
+	\vspace{3ex}
+	\lstset{caption={#1}}
+	\lsgeneral
+	\lsbash
+	\centering\minipage{.9\textwidth}%
+}{
+	\endminipage%
+	\vspace{3ex}
+}
+
+
 \newcommand{\lscpp}{
 \lstset{ 
 	language=C++,% choose the language of the code
@@ -223,6 +243,19 @@ stringstyle=\color{blue!20!green},
 	\endminipage%
 }
 
+%For multiple fields within one slide
+\lstnewenvironment{TPPython}[1][]{
+	\vspace{3ex}
+	\lstset{caption={#1}}
+	\lsgeneral
+	\lspython
+	\centering\minipage{.9\textwidth}%
+}{
+	\endminipage%
+	\vspace{3ex}
+}
+
+
 \newcommand{\lstex}{\lstset{
 language=Tex,
 backgroundcolor=\color{brown!8!white},
@@ -243,6 +276,52 @@ emphstyle=\color{blue}\bfseries,
 	\endminipage%
 }
 
+%For multiple fields within one slide
+\lstnewenvironment{TPLatex}[1][]{
+	\vspace{3ex}
+	\lstset{caption={#1}}
+	\lsgeneral
+	\lstex
+	\centering\minipage{.9\textwidth}%
+}{
+	\endminipage%
+	\vspace{3ex}
+}
+
+
 %Commands
 
 \newcommand{\easyurl}[2]{\href{#2}{\textcolor{blue}{\underline{#1}}}}
+
+% Tikz-hacks
+
+%Enable animation of tikz-drawings:
+\tikzset{
+  invisible/.style={opacity=0},
+  visible on/.style={alt={#1{}{invisible}}},
+  alt/.code args={<#1>#2#3}{%
+    \alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+  },
+}
+%Usage: \node (se) [draw,shape=rectangle,visible on=<5->] {Existence Forte};
+
+% Tables
+
+\usepackage{colortbl}
+\NewDocumentEnvironment{PTable}{O{1}m} %Defines a basic tabular environment
+{
+\begin{center}
+\begin{tabular}{#2}
+\toprule
+}
+{
+\bottomrule
+\end{tabular}
+\end{center}
+}
+%Usage:
+%\begin{TTable}[<startindex for colors>]
+%{<table layout>}
+%<your Content>
+%\end{TTable}
+%Dependencies: \usepackage{booktabs,xcolors,xparse}
